@@ -15,9 +15,9 @@
 
 | 项                                 | 内容                                                                                      |
 | ---------------------------------- | ----------------------------------------------------------------------------------------- |
-| **基线 commit（首次提交 / HEAD）** | `dc06bb258513a75f760357db56c2978a8ae9fde5`（short `dc06bb2`）                             |
+| **基线 commit（首次提交）** | `dc06bb258513a75f760357db56c2978a8ae9fde5`（short `dc06bb2`）                             |
 | 基线提交信息                       | `chore(m0): 需求调研工作台 M0 技术验证基线首次入库`（270 files）                          |
-| 本提交包所属提交                   | **第二次提交**：`<第二次提交 SHA 待回填>`（由总指挥提交并推送后回填）                     |
+| 本提交包所属提交                   | **第二次提交**：`49d910f2d83c2286f1ec9a9c31572795b3a78379`（short `49d910f`，已推送 `origin/main`）                     |
 | remote / branch                    | `https://github.com/SNCIC/odoo-ReqAtlas.git`（origin） / `main`（tracking `origin/main`） |
 | 本轮被复核并冻结的改动集           | **24 个文件**，见 `.codebuddy/audit/freeze-second-commit.txt`（含逐文件 sha256）——详见 §9 |
 | 本提交说明自身的状态               | `docs/engineering/**` 于**冻结之后**撰写，**不在复核范围内**（见 §10）                    |
