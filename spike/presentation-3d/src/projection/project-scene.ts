@@ -1,9 +1,4 @@
-import type {
-  ModelBundle,
-  ModelObject,
-  ModelRelation,
-  ObjectKind,
-} from '@reqatlas/testkit';
+import type { ModelBundle, ModelObject, ModelRelation, ObjectKind } from '@reqatlas/testkit';
 import {
   SCENE_PROJECTION_SCHEMA_VERSION,
   sceneProjectionSchema,
@@ -22,7 +17,7 @@ import {
 /**
  * 确定性投影器：ModelBundle → SceneProjection。
  *
- * 确定性保证（ADR-004 §3.5）：
+ * 确定性保证（ADR-004 决策第 5 条）：
  * - 不读取时间、不使用随机、不依赖对象输入顺序（所有集合都按稳定键排序）。
  * - 字符串比较使用与 locale 无关的码元比较，跨平台一致。
  * - 坐标统一四舍五入到 2 位小数。
@@ -294,7 +289,9 @@ export function projectScene(bundle: ModelBundle): SceneProjection {
       code: problem.code,
       label: problem.title,
       impact: readString(problem.payload, 'impact'),
-      relatedRequirementIds: (requirementsByProblem.get(problem.id) ?? []).slice().sort(compareStrings),
+      relatedRequirementIds: (requirementsByProblem.get(problem.id) ?? [])
+        .slice()
+        .sort(compareStrings),
       position: {
         x: round2(index * SCENE_LAYOUT.stationSpacingX),
         y: SCENE_LAYOUT.issueHeightY,
@@ -364,8 +361,12 @@ export function projectScene(bundle: ModelBundle): SceneProjection {
   order += 1;
 
   for (const station of stations) {
-    const actorLabel = station.actorId ? (actorLabelById.get(station.actorId) ?? '未指定角色') : '未指定角色';
-    const produced = (artifactTitlesByProducer.get(station.sourceObjectId) ?? []).slice().sort(compareStrings);
+    const actorLabel = station.actorId
+      ? (actorLabelById.get(station.actorId) ?? '未指定角色')
+      : '未指定角色';
+    const produced = (artifactTitlesByProducer.get(station.sourceObjectId) ?? [])
+      .slice()
+      .sort(compareStrings);
     const producedText = produced.length > 0 ? `，产出 ${produced.join('、')}` : '';
     steps.push({
       id: stepId(order),
@@ -412,11 +413,14 @@ export function projectScene(bundle: ModelBundle): SceneProjection {
     });
   }
   for (const station of stations) {
-    const actorLabel = station.actorId ? (actorLabelById.get(station.actorId) ?? '未指定角色') : '未指定角色';
+    const actorLabel = station.actorId
+      ? (actorLabelById.get(station.actorId) ?? '未指定角色')
+      : '未指定角色';
     const stationArtifacts = artifacts
       .filter(
         (a) =>
-          a.producedByStationIds.includes(station.id) || a.consumedByStationIds.includes(station.id),
+          a.producedByStationIds.includes(station.id) ||
+          a.consumedByStationIds.includes(station.id),
       )
       .map((a) => a.label)
       .sort(compareStrings);
@@ -427,7 +431,9 @@ export function projectScene(bundle: ModelBundle): SceneProjection {
       code: station.code,
       title: station.label,
       summary: `流程节点「${station.code} ${station.label}」主责角色：${actorLabel}。${
-        stationArtifacts.length > 0 ? `相关交付物：${stationArtifacts.join('、')}。` : '暂无相关交付物。'
+        stationArtifacts.length > 0
+          ? `相关交付物：${stationArtifacts.join('、')}。`
+          : '暂无相关交付物。'
       }`,
     });
   }

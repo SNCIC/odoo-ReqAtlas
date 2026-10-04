@@ -52,7 +52,7 @@
 
 ## 5. 证据来源清单
 
-证据为**独立实体**（与 `modelObject` 分表，实施方案 §5.5 / §14），拥有独立数据分级；
+证据为**独立实体**（与 `modelObject` 分表，实施方案 §4.1「调研与证据」；分级脱敏见 §7.4「导出」），拥有独立数据分级；
 证据到对象的关联由 `evidenceLink` 承载（原 `supported_by` 语义迁移至此）。
 
 | code     | type                | locator（定位）                  | provider | capturedAt | classification | 关联对象（evidenceLink）                                                                |

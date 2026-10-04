@@ -165,7 +165,7 @@ function Workbench(): JSX.Element {
       kind,
       reason:
         kind === 'view_layout_patch'
-          ? '画布拖动产生的布局补丁（不落 revision，ADR-003 §3.4）'
+          ? '画布拖动产生的布局补丁（不落 revision，ADR-003 决策第 4 条）'
           : '画布语义编辑（修改对象 title）',
       source: { type: 'user_action', referenceIds },
       operations: pendingOps,

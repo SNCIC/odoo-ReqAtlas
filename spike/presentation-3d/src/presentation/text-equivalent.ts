@@ -1,7 +1,7 @@
 import type { SceneProjection } from '../projection/scene-projection.schema';
 
 /**
- * 文本等价表达（实施方案 §7.1 / ADR-004 §3.3）：
+ * 文本等价表达（实施方案 §7.1 / ADR-004 §2 上下文：3D 不承载独占信息）：
  * 3D 不承载独占信息——所有 3D 实体与故事步骤都能在这里以列表形式表达。
  */
 

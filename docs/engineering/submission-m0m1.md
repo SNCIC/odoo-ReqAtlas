@@ -13,15 +13,15 @@
 
 ## 1. 基线（本提交包所属批次）
 
-| 项                                 | 内容                                                                                      |
-| ---------------------------------- | ----------------------------------------------------------------------------------------- |
-| **基线 commit（首次提交）** | `dc06bb258513a75f760357db56c2978a8ae9fde5`（short `dc06bb2`）                             |
-| 基线提交信息                       | `chore(m0): 需求调研工作台 M0 技术验证基线首次入库`（270 files）                          |
-| 本提交包所属提交                   | **第二次提交**：`49d910f2d83c2286f1ec9a9c31572795b3a78379`（short `49d910f`，已推送 `origin/main`）                     |
-| remote / branch                    | `https://github.com/SNCIC/odoo-ReqAtlas.git`（origin） / `main`（tracking `origin/main`） |
-| 本轮被复核并冻结的改动集           | **24 个文件**，见 `.codebuddy/audit/freeze-second-commit.txt`（含逐文件 sha256）——详见 §9 |
-| 本提交说明自身的状态               | `docs/engineering/**` 于**冻结之后**撰写，**不在复核范围内**（见 §10）                    |
-| 提交动作                           | 由总指挥执行；本工作流**不 commit / 不 push**                                             |
+| 项                          | 内容                                                                                                |
+| --------------------------- | --------------------------------------------------------------------------------------------------- |
+| **基线 commit（首次提交）** | `dc06bb258513a75f760357db56c2978a8ae9fde5`（short `dc06bb2`）                                       |
+| 基线提交信息                | `chore(m0): 需求调研工作台 M0 技术验证基线首次入库`（270 files）                                    |
+| 本提交包所属提交            | **第二次提交**：`49d910f2d83c2286f1ec9a9c31572795b3a78379`（short `49d910f`，已推送 `origin/main`） |
+| remote / branch             | `https://github.com/SNCIC/odoo-ReqAtlas.git`（origin） / `main`（tracking `origin/main`）           |
+| 本轮被复核并冻结的改动集    | **24 个文件**，见 `.codebuddy/audit/freeze-second-commit.txt`（含逐文件 sha256）——详见 §9           |
+| 本提交说明自身的状态        | `docs/engineering/**` 于**冻结之后**撰写，**不在复核范围内**（见 §10）                              |
+| 提交动作                    | 由总指挥执行；本工作流**不 commit / 不 push**                                                       |
 
 ---
 
@@ -227,7 +227,7 @@ pnpm --filter @reqatlas/spike-agent golden -- --scenario=role-conflict
 - 内容：**24 个文件 + 逐文件 sha256**（每行 `sha256<2 空格>相对路径`）。
 - 清单自身 sha256（`SHA256`）：`8cbc9b03a77aca43b74546fc17e0f9ca8da9b230185094696405f5ddeb65ec92`
   —— 本工作流用 `Get-FileHash -Algorithm SHA256` **独立重算并逐字符匹配**。
-- 与实测 `git status --porcelain` 的冻结项**一一对应（24 条）**（另有 `?? .codebuddy/audit/freeze-second-commit.txt` 为清单本体）。
+- 清单描述的是**提交 `49d910f` 的状态**；比对基准是**不可变的提交 `49d910f`，不是工作树**（详见 §9.1）。清单本体 `.codebuddy/audit/freeze-second-commit.txt` 为未跟踪新文件（`??`）。
 
 **`adr` 独立复核结论**（本工作流未复跑其脚本，均引自 `adr` 报告）：
 
@@ -247,11 +247,12 @@ pnpm --filter @reqatlas/spike-agent golden -- --scenario=role-conflict
 
 ### 9.1 冻结清单的匹配口径（"清单失效行"说明）
 
-- 冻结清单 **24 行**中，**23 行**与当前工作树**逐字节一致**；
-- **唯一不匹配**的是 `docs/review/m0-readonly-review.md`；
-  原因：该文件是**复核者自身输出**，`adr` 在冻结基准取走**之后**更新了它（**397 → 426** 行）；
+- 冻结清单 **24 行**中，**23 行与提交 `49d910f` 的内容逐字节一致**；
+- **唯一不同**的是 `docs/review/m0-readonly-review.md`；
+  原因：该文件是**复核者自身输出**，`adr` 在该基准取走**之后**继续更新其报告（**397 → 426** 行）；
 - 按既定约定，**`docs/review/**` 不属于被复核对象**（`adr` 的冻结判定 **22/22** 正是排除了这两个文件）；
-- 因此该行记录的是**冻结时刻值**，未来比对**必然不匹配**——**这是约定排除，不是冻结破损**；
+- 因此该行记录的是**冻结时刻值**，与提交 `49d910f` 比对**必然不同**——**这是约定排除，不是冻结破损**；
+- **比对基准是提交 `49d910f`（不可变），不是工作树**：工作树会随后续批次（如第三次提交）前进，与清单比对必然产生**预期内的**差异——一份完整性凭据必须写明"比对的是什么"；
 - **应逐项匹配的是以下 22 项**（= 清单 24 项中除 `docs/review/**` 两文件外的全部）：
 
 ```text
@@ -278,6 +279,8 @@ spike/canvas/scripts/browser-perf.ts
 spike/canvas/scripts/perf-adapter.ts
 spike/canvas/scripts/source-bundle.ts
 ```
+
+> **范围**：本清单描述的是**提交 `49d910f` 的状态**；**第三次提交的内容不在其覆盖范围内**（第三次含 12 处引用修正 + 1 处测试消息改进 + `adr` 的检查工具与报告更新）。
 
 ### 9.2 提交内容 与 复核范围 的映射
 
@@ -312,16 +315,16 @@ spike/canvas/scripts/source-bundle.ts
 
 ---
 
-## 12. 延后项（本批不含；第三次小提交）
+## 12. 延后项（**已于第三次提交修复**）
 
-**第三次小提交的范围：文档与产物引用真实性修正 + 一处测试失败信息改进。**
+**状态：下述延后项已于第三次提交修复（紧随本提交，见 `git log`）。** 本节保留为当时登记的清单，供追溯；**不设"待回填 SHA"占位**。
 
-**具体清单待全仓引用完整性扫描结论出来后冻结，本文件不写死文件数。** `adr` 正在做该扫描（173 文件 / `§x.y` 173 处 / `ADR-nnn` 107 处 / `OQ-n` 32 处 / `M-nn` 207 处），**只出清单不修**，故第三次的范围可能继续变化。
+（历史记录）第三次小提交的范围：**文档与产物引用真实性修正 + 一处测试失败信息改进**；具体清单以 `adr` 的全仓引用完整性扫描（`citation-check`）结论为准。
 
-**已确认的示例（仅示类别，非最终清单）：**
+**当时登记的延后项：**
 
 1. **测试失败信息改进（1 处）**：`apps/api/src/common/contract-consistency.spec.ts` 的断言失败信息应指向对齐位置——`docs/api/schemas/error-code.json` 的 `$comment`（机器可读 HTTP 映射）与 `packages/contracts/src/index.ts` 的 `ERROR_CODE_HTTP_STATUS`。当前 `$comment` 解析依赖约定格式，`contracts` 重排版会使其变红（该红合理），但失败信息未指路。
-2. **文档 / 产物引用真实性修正（同一悬空引用 `（ADR-003 §3.4）`，已知 ≥3 处）**：
+2. **文档 / 产物引用真实性修正（同一悬空引用 `（ADR-003 §3.4）`，已知 ≥3 处）** <!-- citation-check:allow：此处为引述缺陷原文，非真实引用 -->：
    - `spike/canvas/README.md:56`（文档）；
    - `spike/canvas/src/changeset.ts`；
    - `spike/canvas/src/App.tsx`——其中 `App.tsx:168` 位于 **ChangeSet `reason` 字段**上，**会随产物输出到页面与控制台**，已从"文档卫生"升级为**产物缺陷**。

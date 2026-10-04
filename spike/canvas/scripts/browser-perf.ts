@@ -68,6 +68,8 @@ try {
       producer: 'spike/canvas/scripts/browser-perf.ts',
       recordedAt: new Date().toISOString(),
       sourceBundleSha256: source.sha256,
+      // 常量回显：与 sourceBundleSha256 **必然相等**（不等则 `resolveFrozenSourceBundle()`
+      // 抛错、产物根本写不出），故它是**标签、不是校验**，无判别力。
       sourceBundleFrozenAnchorSha256: FROZEN_SOURCE_BUNDLE_SHA256,
     },
     payload: report ?? null,

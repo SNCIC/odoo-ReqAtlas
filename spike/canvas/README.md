@@ -53,7 +53,7 @@ sha256 = 1a54c6e3158fb2d7a079fad244e30fd774c6b453e06d3859785978a184e03c62
 - 适配层是**单向投影**：`projectBundle()` 是纯函数（测试断言幂等 + 不修改输入）。
 - **从不把 React Flow 的 JSON 持久化**。拖动节点产出 `view_layout` 操作、改标题产出
   `model_object` 操作，都以 `ChangeSet` 形式输出到页面/控制台（**不写库**）。
-- 布局补丁 `bumpsRevision=false`，语义变更 `bumpsRevision=true`（ADR-003 §3.4）。
+- 布局补丁 `bumpsRevision=false`，语义变更 `bumpsRevision=true`（ADR-003 决策第 4 条）。
 
 ## 页面功能
 

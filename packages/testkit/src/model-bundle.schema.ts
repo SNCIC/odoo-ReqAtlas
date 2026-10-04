@@ -127,7 +127,7 @@ export const viewLayoutSchema = z.object({
 });
 
 /**
- * evidence：独立实体（实施方案 §5.5 / §14）。
+ * evidence：独立实体（实施方案 §4.1「调研与证据」分表存放；分级脱敏见 §7.4「导出」）。
  * 证据与模型对象分表存放，拥有独立的对象级权限与数据分级，
  * 不复用 `data_object`，以便 M7/M8 承载分级与脱敏。
  */
@@ -140,7 +140,7 @@ export const evidenceTypeSchema = z.enum([
   'document',
 ]);
 
-/** 数据级别（§14.1 脱敏口径）。 */
+/** 数据级别（实施方案 §7.4「导出」分类策略与脱敏）。 */
 export const evidenceClassificationSchema = z.enum([
   'project_public',
   'internal',
@@ -159,7 +159,7 @@ export const evidenceSchema = z.object({
   classification: evidenceClassificationSchema,
 });
 
-/** evidence_link：证据到模型对象的关联（§5.5），承载原 `supported_by` 语义。 */
+/** evidence_link：证据到模型对象的关联（实施方案 §4.1「调研与证据」），承载原 `supported_by` 语义。 */
 export const evidenceLinkSchema = z.object({
   id: z.string().min(1),
   evidenceId: z.string().min(1),

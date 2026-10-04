@@ -14,7 +14,7 @@ import type {
 } from '../projection/scene-projection.schema';
 
 /**
- * 低多边形 3D 导览（ADR-004 §3.3）：
+ * 低多边形 3D 导览（ADR-004 决策第 3 条）：
  * 只消费 SceneProjection；不做写实办公室 / 数字人 / 物理仿真。
  * 支持轨道浏览（旋转/平移/缩放）与点击拾取。
  */
@@ -43,10 +43,7 @@ function RegionMesh({ region }: { region: SceneRegion }): JSX.Element {
         <boxGeometry args={[region.size.x, region.size.y, region.size.z]} />
         <meshStandardMaterial color="#1e293b" transparent opacity={0.4} />
       </mesh>
-      <mesh
-        position={[region.position.x, 0.02, region.position.z]}
-        rotation={[-Math.PI / 2, 0, 0]}
-      >
+      <mesh position={[region.position.x, 0.02, region.position.z]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[region.size.x, region.size.z]} />
         <meshStandardMaterial color="#0f172a" transparent opacity={0.55} />
       </mesh>
@@ -172,10 +169,7 @@ function ArtifactMesh({
       }}
     >
       <boxGeometry args={[1.2, 1.2, 1.2]} />
-      <meshStandardMaterial
-        color={selected ? SELECTED_COLOR : '#c084fc'}
-        wireframe
-      />
+      <meshStandardMaterial color={selected ? SELECTED_COLOR : '#c084fc'} wireframe />
     </mesh>
   );
 }

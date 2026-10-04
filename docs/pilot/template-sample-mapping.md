@@ -20,7 +20,7 @@
 **已裁定（team-lead，2026-10-04）**：
 
 - **不建** `p2p` / `short_receipt` 独立 fixture，延后。理由：ModelBundle 契约尚未冻结；
-  实施方案 §8.5 金样例清单本只有 `demo-trade` + `demo-manufacturing`。
+  实施方案 §8.2 金样例清单本只有 `demo-trade` + `demo-manufacturing`。
   触发条件：契约冻结 + M4-01 需验证「采购到付款」闭环。
 - `credit_block` 继续复用 demo-trade 分支，不建独立 fixture。
 - `short_receipt` 的「近似覆盖（`EXC-101` 质检不合格）」标注**放在本文件**（测试侧），不进知识包。

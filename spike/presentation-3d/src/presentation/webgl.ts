@@ -1,5 +1,5 @@
 /**
- * WebGL 可用性探测（ADR-004 §3.4）。
+ * WebGL 可用性探测（ADR-004 决策第 4 条）。
  *
  * 纯函数式：允许注入 `document`，便于在 Node 环境用桩对象验证降级判定，
  * 无需真实浏览器或 Docker。
@@ -24,7 +24,9 @@ export function detectWebglSupport(
     return { supported: false, renderer: null, reason: '无法创建 canvas，降级为 2D。' };
   }
   const context =
-    canvas.getContext('webgl2') ?? canvas.getContext('webgl') ?? canvas.getContext('experimental-webgl');
+    canvas.getContext('webgl2') ??
+    canvas.getContext('webgl') ??
+    canvas.getContext('experimental-webgl');
   if (!context) {
     return { supported: false, renderer: null, reason: '无法获取 WebGL 上下文，降级为 2D。' };
   }

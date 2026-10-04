@@ -4,7 +4,7 @@
  * 关键点：
  * - ChangeSet 是**语义变更**的载体，而不是 React Flow JSON。
  * - 每条 operation 必须携带 `sourceRefs` 与 `confidenceState`（P4 事实与推断分离）。
- * - 布局拖动只在短时间内合并为 `view_layout_patch`，**不产生 revision**（ADR-003 §3.4）。
+ * - 布局拖动只在短时间内合并为 `view_layout_patch`，**不产生 revision**（ADR-003 决策第 4 条）。
  */
 import type { ModelObject, SourceStatus } from './domain';
 

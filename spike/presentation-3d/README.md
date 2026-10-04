@@ -23,14 +23,18 @@ pnpm --filter @reqatlas/spike-presentation-3d dev
 - **证据**：`scene-projection.sample.json` 由投影器生成并提交；
   `src/__tests__/sample.test.ts` 断言已提交样本与即时投影**逐字段一致**（防漂移）。
 - **展示布局不外写语义**：`regions/actors/stations/paths/...` 中的 `position/size/points` 只属展示布局，
-  不写回任何业务对象（ADR-004 §3.6）。
+  不写回任何业务对象（ADR-004 决策第 6 条）。
 
 ### 投影器用法
 
 ```ts
-import { loadDemoTradeBundle, projectScene, parseSceneProjection } from '@reqatlas/spike-presentation-3d';
+import {
+  loadDemoTradeBundle,
+  projectScene,
+  parseSceneProjection,
+} from '@reqatlas/spike-presentation-3d';
 
-const bundle = loadDemoTradeBundle();   // 经 testkit Schema 校验的 ModelBundle
+const bundle = loadDemoTradeBundle(); // 经 testkit Schema 校验的 ModelBundle
 const projection = projectScene(bundle); // 确定性 SceneProjection
 // 也可从任意 JSON 反序列化：parseSceneProjection(json)
 ```
@@ -50,16 +54,16 @@ pnpm --filter @reqatlas/spike-presentation-3d emit:sample
 
 `src/projection/scene-projection.schema.ts`：
 
-| 字段 | 来源 | 说明 |
-| --- | --- | --- |
-| `regions` | `role.payload.department`（并集站点部门） | 区域；无部门归「未分组」 |
-| `actors` | `kind=role` | 演员（低多边形标记） |
-| `stations` | 流程节点 kind | 站点，含主责角色与拓扑顺序 |
-| `paths` | `flow_to` | 路径，携带分支条件 `label` / `condition` |
-| `issues` | `kind=problem` | 问题 |
-| `artifacts` | `kind=data_object` | 交付物（produces/consumes 关联） |
-| `steps` | 投影派生 | 故事步骤（总览 + 站点 + 问题），3D 与 2D 共用 |
-| `cards` | 投影派生 | 对象通俗卡，3D 拾取与 2D 列表共用 |
+| 字段        | 来源                                      | 说明                                          |
+| ----------- | ----------------------------------------- | --------------------------------------------- |
+| `regions`   | `role.payload.department`（并集站点部门） | 区域；无部门归「未分组」                      |
+| `actors`    | `kind=role`                               | 演员（低多边形标记）                          |
+| `stations`  | 流程节点 kind                             | 站点，含主责角色与拓扑顺序                    |
+| `paths`     | `flow_to`                                 | 路径，携带分支条件 `label` / `condition`      |
+| `issues`    | `kind=problem`                            | 问题                                          |
+| `artifacts` | `kind=data_object`                        | 交付物（produces/consumes 关联）              |
+| `steps`     | 投影派生                                  | 故事步骤（总览 + 站点 + 问题），3D 与 2D 共用 |
+| `cards`     | 投影派生                                  | 对象通俗卡，3D 拾取与 2D 列表共用             |
 
 ## 3D 场景
 
