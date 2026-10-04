@@ -1,35 +1,43 @@
 {
-  "mode": "pan-zoom",
-  "scaleFactor": 1,
-  "nodeCount": 33,
-  "edgeCount": 54,
-  "frames": {
-    "sampleCount": 300,
-    "durationMs": 5014,
-    "frameMsP50": 16.7,
-    "frameMsP95": 16.7,
-    "frameMsMax": 16.8,
-    "fpsMean": 60,
-    "fpsP05": 59.9
+  "metadata": {
+    "producer": "spike/canvas/scripts/browser-perf.ts",
+    "recordedAt": "2026-10-04T09:53:47.797Z",
+    "sourceBundleSha256": "1a54c6e3158fb2d7a079fad244e30fd774c6b453e06d3859785978a184e03c62",
+    "sourceBundleFrozenAnchorSha256": "1a54c6e3158fb2d7a079fad244e30fd774c6b453e06d3859785978a184e03c62"
   },
-  "longTasks": {
-    "supported": true,
-    "count": 2,
-    "totalMs": 146,
-    "maxMs": 83
-  },
-  "memoryBefore": {
-    "usedMb": 9.5,
-    "totalMb": 11.3,
-    "limitMb": 3585.8
-  },
-  "memoryAfter": {
-    "usedMb": 9.5,
-    "totalMb": 11.3,
-    "limitMb": 3585.8
-  },
-  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
-  "hardwareConcurrency": 32,
-  "startedAt": "2026-10-04T09:27:52.456Z",
-  "notes": "合成平移+缩放：每帧 setViewport 同时振荡 x/y 与 zoom（会触发重新栅格化），非真实人类输入。"
+  "payload": {
+    "mode": "pan-zoom",
+    "scaleFactor": 1,
+    "nodeCount": 33,
+    "edgeCount": 54,
+    "frames": {
+      "sampleCount": 300,
+      "durationMs": 5015,
+      "frameMsP50": 16.7,
+      "frameMsP95": 16.8,
+      "frameMsMax": 16.8,
+      "fpsMean": 60,
+      "fpsP05": 59.5
+    },
+    "longTasks": {
+      "supported": true,
+      "count": 2,
+      "totalMs": 131,
+      "maxMs": 73
+    },
+    "memoryBefore": {
+      "usedMb": 9.5,
+      "totalMb": 11.3,
+      "limitMb": 3585.8
+    },
+    "memoryAfter": {
+      "usedMb": 9.5,
+      "totalMb": 11.3,
+      "limitMb": 3585.8
+    },
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+    "hardwareConcurrency": 32,
+    "startedAt": "2026-10-04T09:53:47.776Z",
+    "notes": "合成平移+缩放：每帧 setViewport 同时振荡 x/y 与 zoom（会触发重新栅格化），非真实人类输入。"
+  }
 }

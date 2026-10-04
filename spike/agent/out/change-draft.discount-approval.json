@@ -1,116 +1,126 @@
 {
-  "draftId": "draft_discount_approval",
-  "basedOnRevision": 1,
-  "scope": {
-    "type": "project",
-    "id": "PRJ-TRADE-001"
+  "metadata": {
+    "kind": "change-draft",
+    "scenarioId": "discount-approval",
+    "basedOnRevision": 1,
+    "sourceBundlePath": "demo-trade/model-bundle.json",
+    "sourceBundleSha256": "1a54c6e3158fb2d7a079fad244e30fd774c6b453e06d3859785978a184e03c62",
+    "generatedBy": "scripts/golden-run.ts"
   },
-  "intent": "create",
-  "assumptions": [],
-  "questions": [],
-  "changes": [
-    {
-      "operationId": "op_1",
-      "op": "link",
-      "targetType": "model_relation",
-      "tempId": "tmp_rel_consult_finance",
-      "before": null,
-      "after": {
-        "kind": "consulted_C",
-        "fromId": "ROLE-003",
-        "toId": "ACT-003"
-      },
-      "reason": "用户要求把财务加入折扣审批（被咨询）",
-      "sourceRefs": [
-        {
-          "type": "user_input",
-          "id": "msg_1"
-        }
-      ],
-      "confidenceState": "user_statement"
+  "payload": {
+    "draftId": "draft_discount_approval",
+    "basedOnRevision": 1,
+    "scope": {
+      "type": "project",
+      "id": "PRJ-TRADE-001"
     },
-    {
-      "operationId": "op_2",
-      "op": "create",
-      "targetType": "model_object",
-      "tempId": "tmp_activity_discount_recheck",
-      "before": null,
-      "after": {
-        "kind": "activity",
-        "code": "ACT-011",
-        "title": "折扣财务复核",
-        "state": "draft",
-        "sourceStatus": "user_statement",
-        "payload": {}
-      },
-      "reason": "折扣超过 10% 后需财务复核",
-      "sourceRefs": [
-        {
-          "type": "user_input",
-          "id": "msg_1"
-        }
-      ],
-      "confidenceState": "user_statement"
-    },
-    {
-      "operationId": "op_3",
-      "op": "link",
-      "targetType": "model_relation",
-      "tempId": "tmp_rel_recheck_r",
-      "before": null,
-      "after": {
-        "kind": "performs_R",
-        "fromId": "ROLE-003",
-        "toId": "tmp_activity_discount_recheck"
-      },
-      "reason": "财务执行折扣复核",
-      "sourceRefs": [
-        {
-          "type": "user_input",
-          "id": "msg_1"
-        }
-      ],
-      "confidenceState": "user_statement"
-    },
-    {
-      "operationId": "op_4",
-      "op": "link",
-      "targetType": "model_relation",
-      "tempId": "tmp_rel_recheck_a",
-      "before": null,
-      "after": {
-        "kind": "accountable_A",
-        "fromId": "ROLE-002",
-        "toId": "tmp_activity_discount_recheck"
-      },
-      "reason": "销售经理对折扣复核最终负责",
-      "sourceRefs": [
-        {
-          "type": "user_input",
-          "id": "msg_1"
-        }
-      ],
-      "confidenceState": "user_statement"
-    }
-  ],
-  "sources": [
-    {
-      "type": "user_input",
-      "id": "msg_1"
-    }
-  ],
-  "validation": {
-    "blocking": [],
-    "warnings": [
+    "intent": "create",
+    "assumptions": [],
+    "questions": [],
+    "changes": [
       {
-        "ruleCode": "OBJECT_NO_EVIDENCE",
-        "severity": "warn",
-        "objectIds": [
-          "tmp_activity_discount_recheck"
+        "operationId": "op_1",
+        "op": "link",
+        "targetType": "model_relation",
+        "tempId": "tmp_rel_consult_finance",
+        "before": null,
+        "after": {
+          "kind": "consulted_C",
+          "fromId": "ROLE-003",
+          "toId": "ACT-003"
+        },
+        "reason": "用户要求把财务加入折扣审批（被咨询）",
+        "sourceRefs": [
+          {
+            "type": "user_input",
+            "id": "msg_1"
+          }
         ],
-        "message": "关键事实对象 ACT-011(折扣财务复核) 没有任何 evidenceLink 证据支撑"
+        "confidenceState": "user_statement"
+      },
+      {
+        "operationId": "op_2",
+        "op": "create",
+        "targetType": "model_object",
+        "tempId": "tmp_activity_discount_recheck",
+        "before": null,
+        "after": {
+          "kind": "activity",
+          "code": "ACT-011",
+          "title": "折扣财务复核",
+          "state": "draft",
+          "sourceStatus": "user_statement",
+          "payload": {}
+        },
+        "reason": "折扣超过 10% 后需财务复核",
+        "sourceRefs": [
+          {
+            "type": "user_input",
+            "id": "msg_1"
+          }
+        ],
+        "confidenceState": "user_statement"
+      },
+      {
+        "operationId": "op_3",
+        "op": "link",
+        "targetType": "model_relation",
+        "tempId": "tmp_rel_recheck_r",
+        "before": null,
+        "after": {
+          "kind": "performs_R",
+          "fromId": "ROLE-003",
+          "toId": "tmp_activity_discount_recheck"
+        },
+        "reason": "财务执行折扣复核",
+        "sourceRefs": [
+          {
+            "type": "user_input",
+            "id": "msg_1"
+          }
+        ],
+        "confidenceState": "user_statement"
+      },
+      {
+        "operationId": "op_4",
+        "op": "link",
+        "targetType": "model_relation",
+        "tempId": "tmp_rel_recheck_a",
+        "before": null,
+        "after": {
+          "kind": "accountable_A",
+          "fromId": "ROLE-002",
+          "toId": "tmp_activity_discount_recheck"
+        },
+        "reason": "销售经理对折扣复核最终负责",
+        "sourceRefs": [
+          {
+            "type": "user_input",
+            "id": "msg_1"
+          }
+        ],
+        "confidenceState": "user_statement"
       }
-    ]
-  },
-  "summary": "把财务（复用 ROLE-003）加入折扣审批作为被咨询方，并新增一个由销售经理负责的折扣财务复核事项。"
+    ],
+    "sources": [
+      {
+        "type": "user_input",
+        "id": "msg_1"
+      }
+    ],
+    "validation": {
+      "blocking": [],
+      "warnings": [
+        {
+          "ruleCode": "OBJECT_NO_EVIDENCE",
+          "severity": "warn",
+          "objectIds": [
+            "tmp_activity_discount_recheck"
+          ],
+          "message": "关键事实对象 ACT-011(折扣财务复核) 没有任何 evidenceLink 证据支撑"
+        }
+      ]
+    },
+    "summary": "把财务（复用 ROLE-003）加入折扣审批作为被咨询方，并新增一个由销售经理负责的折扣财务复核事项。"
+  }
 }

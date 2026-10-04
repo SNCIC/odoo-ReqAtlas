@@ -17,7 +17,8 @@
 | OQ-2 | 跨包 `templateOrigin` 结构化引用语义未定义 | `templateOrigin` 增加可选 `crossPackageRefs[]` | M4 开始前（P2 模板治理设计前） | 待裁定 |
 | OQ-3 | `templateCandidate` 与 `state` 一致性是否进契约 | 规则码+findings 进契约，判定由服务端 Domain Guard 执行 | M2-05 规则实现前 | 待裁定 |
 | OQ-4 | 附录 A 缺 500/未预期错误的稳定错误码 | **(A) 新增 `INTERNAL_ERROR`(500) 进契约**（对附录 A 的补充，总数 10→11，走变更单；team-lead 建议默认） | M1-06 契约代码生成前 | 待裁定 |
-| OQ-5 | 租户上下文的最终来源（影响 400/401 语义） | **(B) 保留请求头，缺省 `VALIDATION_FAILED`(400)**（team-lead 临时裁定） | M1-03 开始前 | 待裁定 |
+| OQ-5 | 租户上下文的最终来源（影响 400/401 语义） | **(B) 保留请求头，缺省 `VALIDATION_FAILED`(400)**（team-lead 临时裁定） | M1-03 开始前 | **临时裁定 (B) 已生效，M1-03 复核（是否切会话派生 401）** |
+| OQ-6 | 契约 `requestId` pattern 无长度上限 vs 实现 `{1,64}` | **(A) 把 64 上界写进契约**（三处同步，明确"可复用"边界；不放宽实现） | M1 契约冻结前 | 待裁定 |
 
 ---
 
@@ -150,10 +151,17 @@ M2-05 领域规则实现前。
 - 第四处违约（本问题另一证据）：同一过滤器的 `` return `HTTP_${status}` `` 兜底会产出**任意** code
   （如 `HTTP_403`）。team-lead 已要求 `foundation` 删除该兜底，改为**显式映射表 + 覆盖性测试**
   （未映射状态显式失败，而非静默造码）。
+- **实现侧独立证据（两个互不相干的方向指向同一缺口）**：
+  - `packages/contracts/src/index.ts` 已把 `INTERNAL_ERROR` 显式登记为 **`NON_CONTRACT_FALLBACK`**，
+    且该常量上方注释自带处置约定：OQ-4 一旦裁定"正式新增进契约"，此常量**必须删除并并入 `ERROR_CODES`**；
+    命名刻意与 `ERROR_CODES` 区分，使违约一眼可辨。
+  - `apps/api/src/common/status-code-map.ts` 的 `STATUS_DEFAULT_CODE` 含
+    `500: NON_CONTRACT_FALLBACK.INTERNAL_ERROR` —— 即 **500 在契约里无码可发**：实现侧不是"想要"它，
+    而是"没有它就发不出合法响应"。
 
 **影响面（Schema / 端点 / 里程碑）**
 - Schema：`schemas/problem.json`（当前对 `error-code.json` 做**严格 `$ref`**）、OpenAPI 错误响应。
-- 代码：生成客户端、`apps/api` 错误处理分支。
+- 代码：生成客户端、`apps/api` 错误处理分支、`packages/contracts` 的 `NON_CONTRACT_FALLBACK`。
 - 端点：所有返回 `application/problem+json` 的端点。
 - 里程碑：M1-06（契约代码生成前）。
 
@@ -167,6 +175,8 @@ M2-05 领域规则实现前。
 **建议默认**（team-lead 建议默认，待总指挥最终裁定）
 选项 (A)：新增 `INTERNAL_ERROR`(500)。理由：缺 500 码更像**附录 A 的遗漏**，而非刻意范围决定；
 在 README 与 `error-code.json` 显著记录这是对附录 A 的补充。落地须走变更单。
+**同时必须删除 `NON_CONTRACT_FALLBACK`（而非保留）**——新增 `INTERNAL_ERROR` 后若仍留着它，
+会留下一个永久的"契约外套餐"（实现里长期存在一个不在契约内的码）。
 
 > **与"10 vs 11"事实更正的区分（避免误读为结论翻转）**
 > 此前更正的是**事实陈述**：附录 A **实际列了 10 个**码（派单时"11 个"是误述），该项记录**不变**。
@@ -221,6 +231,43 @@ M1-03 开始前。
 **契约现状**
 按 team-lead 临时裁定 (B)：缺省 400 `VALIDATION_FAILED`；不影响错误码枚举，仅涉及 400/401 语义归属，
 M1-03 后复核。
+
+---
+
+## OQ-6 契约 `requestId` pattern 无长度上限，实现有 `{1,64}`
+
+**问题描述**
+契约的 `requestId` pattern `^req_[A-Za-z0-9_-]+$`（`problem.json`，以及 `openapi.yaml` 的
+`Meta.requestId` 与 `XRequestId` 头）**没有长度上界**；而实现的入站复用判定
+`INBOUND_REQUEST_ID_PATTERN = /^req_[A-Za-z0-9_-]{1,64}$/`（`apps/api/src/common/request-id.hook.ts`）
+**上界为 64**，其注释声称"与契约一致"——严格说更严，**并不一致**。
+
+**证据（谁在哪发现）**
+- 发现者：team-lead（核实实现侧时发现）。
+- 契约：`docs/api/schemas/problem.json` → `pattern: ^req_[A-Za-z0-9_-]+$`（无上界）。
+- 实现：`apps/api/src/common/request-id.hook.ts` → `INBOUND_REQUEST_ID_PATTERN = /^req_[A-Za-z0-9_-]{1,64}$/`。
+
+**影响面（Schema / 端点 / 里程碑）**
+- Schema：`problem.json`（`requestId`）、`openapi.yaml`（`Meta.requestId`、`XRequestId` 头）。
+- 端点：所有响应（成功体 `meta.requestId` 与错误体 `problem.requestId`）。
+- 里程碑：M1 契约冻结前；受影响能力为 BFF → API 跨跳 requestId 关联。
+
+**可选项与后果**
+| 选项 | 后果 |
+| --- | --- |
+| (A) 把 64 上界写进契约（`{1,64}`，三处同步） | "可复用"有明确定义；给入站字符串设界，避免响应头/日志的无界注入面。**team-lead 倾向 / 建议默认** |
+| (B) 放松实现为无上界（对齐契约现状） | 契约读起来允许任意长度；入站可复用串无界，注入面扩大。**不推荐** |
+| (C) 保持分歧不改 | 超 64 但**符合契约**的 requestId 会被**静默替换**，跨跳关联能力无感丢失；客户端按契约校验又与实现不一致。**不推荐** |
+
+**建议默认**
+选项 (A)：把 64 上界写进契约（`^req_[A-Za-z0-9_-]{1,64}$`，同步 `problem.json`、`Meta.requestId`、
+`XRequestId` 头三处），使"可复用"有明确边界。这是 team-lead 的倾向；最终由总指挥裁定。
+
+**最晚确认点**
+M1 契约冻结前。
+
+**契约现状**
+契约保持无上界现状，**未**擅自加 `{1,64}`；待裁定。
 
 ---
 

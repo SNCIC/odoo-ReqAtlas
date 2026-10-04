@@ -22,7 +22,7 @@
 | R-3 | Agent 无直接写数据库或写基线能力 | `rg -n "insert\|update\|baseline" apps/worker/src apps/api/src --glob '*agent*'`；检查 `change_draft` 是唯一 Agent 产出 | Agent 直接调用 repository 写入，或能创建 `baseline` |
 | R-4 | 无来源（`sourceRefs` 为空）的事实进入基线 | `rg -n "sourceRefs\|source_refs\|confidenceState\|confidence_state" packages apps`；检查基线应用校验 | 事实型操作缺少 `sourceRefs` 仍能应用；假设（assumption）进入基线 |
 | R-5 | 布局坐标未被当作业务语义持久化 | `rg -n "view_layout\|ViewLayout\|position\|x:\|y:" packages/domain packages/canvas packages/db` | React Flow 节点/边 JSON 被直接持久化为事实；拖动产生 revision |
-| R-6 | 测试无被跳过 / 被伪造 / 只测实现细节 | `rg -n "\.skip\|\.todo\|it\.only\|describe\.only\|xit\(|xdescribe\(" apps packages`；人工审阅断言语义 | 存在 `.skip`/`.only`；断言只校验 mock 调用次数而非业务行为 |
+| R-6 | 测试无被跳过 / 被伪造 / 只测实现细节 | `rg -n "\.skip\|\.todo\|it\.only\|describe\.only\|xit\(\|xdescribe\(" apps packages`；人工审阅断言语义 | 存在 `.skip`/`.only`；断言只校验 mock 调用次数而非业务行为 |
 
 ---
 
@@ -118,17 +118,18 @@
 | 检查点 | 判定依据 | 检查命令 / 文件定位 | 典型不通过症状 |
 | --- | --- | --- | --- |
 | 测试验证业务行为（见 R-6） | 断言业务结果，非实现细节 | 人工审阅测试文件断言 | 只断言 mock 被调用 |
-| 无被跳过的用例 | 无 `.skip` / `.only` / `todo` | `rg -n "\.skip\|\.todo\|\.only\|xit\(|xdescribe\(" apps packages` | 存在跳过的关键用例 |
+| 无被跳过的用例 | 无 `.skip` / `.only` / `todo` | `rg -n "\.skip\|\.todo\|\.only\|xit\(\|xdescribe\(" apps packages` | 存在跳过的关键用例 |
 | 无伪造通过 | 结果来自真实执行 | `pnpm ci` 输出；CI 运行链接 | 声称通过但无输出/链接 |
-| 规则单测全覆盖 | 12 条领域规则各有稳定 code 的测试 | `rg -n "test\(|it\(" packages/domain` | 规则无对应测试 |
+| 规则单测全覆盖 | 12 条领域规则各有稳定 code 的测试 | `rg -n "test\(\|it\(" packages/domain` | 规则无对应测试 |
 | 并发/幂等/回滚测试存在 | 覆盖 §6.3 验收标准 | 集成测试文件；`rg -n "REVISION_CONFLICT\|IDEMPOTENCY_MISMATCH" apps packages` | 无并发冲突测试 |
 | 金样例回归存在 | Agent / 文档金样例 | `rg -n "agent-golden\|document-golden\|security-fixture" apps packages` | 无金样例回归 |
 | 端到端路径存在 | 新手核心路径 + fake provider | Playwright 用例 | 只有单元测试，无端到端 |
 | 架构测试有效 | 违反红线会失败 | 临时注入违规导入，`pnpm arch` 必须失败 | 架构测试形同虚设 |
 | 无依赖"总数/魔数"的脆弱断言 | 断言由被测数据结构**派生**（计数由过滤推导），而非写死常量或基线哈希 | `rg -n "\.length\)\.toBe\([0-9]{2,}\|toHaveLength\([0-9]{2,}" apps packages spike`；`rg -n "toBe\([\"'][0-9a-f]{32,}\|baselineHash\|frozenHash" apps packages spike` | 上游数据合法演进后测试变红，或更坏地恒真（永远锁定旧值）。已知失效模式：把对象总数写死（如 `expect(x.length).toBe(33)`）、或写死基线哈希，而不是按 schema / 过滤派生，导致契约冻结后断言脆弱 |
 | 无"为变绿而弱化门禁"的配置 | 不使用 `--passWithNoTests`、`\|\| true`、`exit 0` 之类静默兜底；被跳过的用例须有对应跟踪项 | `rg -n "passWithNoTests\|\-\-bail\|exit 0\|\-\-if-present" package.json apps packages spike .github`；`rg -n "\.skip\|\.todo\|xdescribe\|xit\(\|it\.only\|describe\.only" apps packages spike` | 测试被删空或被跳过时 CI 仍然绿。已知失效模式：包级测试脚本曾带 `--passWithNoTests`，使"零测试"也能通过；同一标准适用于所有包与 spike 包 |
-| 检索结论须在当前工作树复现，且区分注释与活代码 | (1) 任何"某处/某物存在或不存在"的结论，必须在**作出结论的时点**重新检索，不得引用此前某一轮的观测或他人的结论；(2) 命中字符串必须区分**注释与可执行代码**——注释、文档、示例中的字符串**不构成实现存在**；(3) 命中为零**不等于**未实现：须换一种检索口径（缩进、命名、导出名、引用方 `import`、生成物）复检后再下结论；(4) **命名/归属类检索**（如"是否指名某人"）必须区分**人名**与**路径、包名、目录名、文件名占位符**——子串命中须逐条查看上下文后再判定，不得仅凭命中计数下结论 |
-| 写入文档/注释的约束性前提须在落笔时点复验 | 文档或注释中以"因为/因此/必须"表述的**因果前提**，必须在**写下的时点**用当前工作树复验一次，并区分"事实仍成立"与"仅当时成立"：不得保留已失效的前提，也不得删除仍成立的前提 | 对每个因果前提在当下重跑其依据：`rg -n "<被引用的报错/符号/常量>" <相关目录>`；对照权威源确认前提是否仍成立（如 `packages/testkit/src/index.ts` 的 `export *` 链是否仍把 Node-only 模块带进入口）；产物类前提须**重算**（`Get-FileHash`）而非引用旧值 | 文档里把**已被修复**的旧报错当作"必须这样做"的理由继续保留；或反之把**依然成立**的约束说明误判为过期而删除。已知失效模式：注释以旧的 cwd 行为断言"某加载器不可用"（前提已消失却仍被引用），而"包入口会把 Node-only 模块带进浏览器图"这类前提仍在的说明被误判过期 | 排除注释后检索活代码：`rg -n --glob '!*.md' "<模式>" apps packages spike`，再对命中逐条**人工确认**是否为注释（`rg -n '^\s*(//\|\*\|#)' -A0` 仅辅助，最终须人眼确认）；对"不存在"的结论要求**换口径二次检索**：同时检索字符串、导出名、引用方 `import`；产物类结论须**重算而非引用**（`Get-FileHash`、`git status --porcelain`、重新执行一次命令） | 复核报告基于上一轮或他人的观测；把注释/文档里的字符串当成实现；用"grep 未命中"直接下"未实现"结论。已知失效模式：转达已失效的旧快照、把注释命中当作活代码兜底、因缩进/命名假设错误而误判"未落地" |
+| 检索结论须在当前工作树复现，且区分注释与活代码 | (1) 任何"某处/某物存在或不存在"的结论，必须在**作出结论的时点**重新检索，不得引用此前某一轮的观测或他人的结论；(2) 命中字符串必须区分**注释与可执行代码**——注释、文档、示例中的字符串**不构成实现存在**；(3) 命中为零**不等于**未实现：须换一种检索口径（缩进、命名、导出名、引用方 `import`、生成物）复检后再下结论；(4) **命名/归属类检索**（如"是否指名某人"）必须区分**人名**与**路径、包名、目录名、文件名占位符**——子串命中须逐条查看上下文后再判定，不得仅凭命中计数下结论 | 排除注释后检索活代码：`rg -n --glob '!*.md' "<模式>" apps packages spike`，再对命中逐条**人工确认**是否为注释（`rg -n '^\s*(//\|\*\|#)' -A0` 仅辅助，最终须人眼确认）；对"不存在"的结论要求**换口径二次检索**：同时检索字符串、导出名、引用方 `import`；产物类结论须**重算而非引用**（`Get-FileHash`、`git status --porcelain`、重新执行一次命令） | 复核报告基于上一轮或他人的观测；把注释/文档里的字符串当成实现；用"grep 未命中"直接下"未实现"结论。已知失效模式：转达已失效的旧快照、把注释命中当作活代码兜底、因缩进/命名假设错误而误判"未落地" |
+| 写入文档/注释的约束性前提须在落笔时点复验 | 文档或注释中以"因为/因此/必须"表述的**因果前提**，必须在**写下的时点**用当前工作树复验一次，并区分"事实仍成立"与"仅当时成立"：不得保留已失效的前提，也不得删除仍成立的前提 | 对每个因果前提在当下重跑其依据：`rg -n "<被引用的报错/符号/常量>" <相关目录>`；对照权威源确认前提是否仍成立（如 `packages/testkit/src/index.ts` 的 `export *` 链是否仍把 Node-only 模块带进入口）；产物类前提须**重算**（`Get-FileHash`）而非引用旧值 | 文档里把**已被修复**的旧报错当作"必须这样做"的理由继续保留；或反之把**依然成立**的约束说明误判为过期而删除。已知失效模式：注释以旧的 cwd 行为断言"某加载器不可用"（前提已消失却仍被引用），而"包入口会把 Node-only 模块带进浏览器图"这类前提仍在的说明被误判过期 |
+| 阴性结果必须配阳性对照 | 任何"某物不存在"的结论，必须同时证明所用检索方式在**同一输入**上能检出确实存在的东西；只有阴性结果、没有阳性对照的检查，**不构成证据** | 选**字符串字面量 / 模块说明符**做探针（不要选会被压缩改名的标识符）：`$raw=[System.IO.File]::ReadAllText(<file>); [regex]::Matches($raw,[regex]::Escape('<字面量>')).Count`；先跑一组**阳性对照**（确信存在的枚举字面量，如 `pending_confirmation`），再跑**阴性目标**（如 `node:fs`、`REQATLAS_FIXTURE_ROOT`）；**禁用** `@((Select-String ...).Matches).Count` 口径（零命中时 `.Matches` 为 `$null`，`@($null).Count == 1`，会把 0 报成 1） | 阳性对照与阴性目标**同为 0**，探针实际无效却被当作"不存在"的证据；把 0 命中误报为 1；用压缩会改名的标识符（函数/常量名）做探针导致假阴性；用 `Select-String` 读压缩后的超长单行文件而全 0 |
 
 ---
 

@@ -99,7 +99,7 @@ $env:BENCH_SCALE='15'; $env:BENCH_MODE='pan-zoom'; $env:BENCH_OUT='perf/s15-panz
 pnpm --filter @reqatlas/spike-canvas perf:browser
 ```
 
-原始报告见 `spike/canvas/perf/s*.json`。
+原始报告见 `spike/canvas/perf/s*.json`，形状为 `{ metadata, payload }`：`metadata` 记录**重算**的源 bundle sha256（自证基线），`payload` 为浏览器探针报告。
 
 ### 人工观测步骤（无自动化时）
 

@@ -11,6 +11,10 @@
  *
  * 页面通过 `?bench=1` 自动执行，并通过 `window.__canvasPerfReport` 回传结果
  * （见 src/perf/browser-probe.ts 与 App.tsx 的自动化入口）。
+ *
+ * 产物形状（`BENCH_OUT`）：`{ metadata, payload }`
+ * —— `metadata` 记录"基于哪份基线"（重算的源 bundle sha256），
+ * `payload` 记录"浏览器测到了什么"（探针报告）。二者结构分离，便于独立校验。
  */
 import { existsSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -18,6 +22,7 @@ import { fileURLToPath } from 'node:url';
 import { preview } from 'vite';
 import { chromium } from 'playwright';
 import type { BrowserPerfReport } from '../src/perf/browser-probe';
+import { FROZEN_SOURCE_BUNDLE_SHA256, resolveFrozenSourceBundle } from './source-bundle';
 
 type BenchWindow = Window & {
   __canvasPerfDone?: boolean;
@@ -36,6 +41,11 @@ if (!existsSync(path.join(root, 'dist', 'index.html'))) {
   process.exit(2);
 }
 
+// 先重算并校验源基线；不一致立即抛错，避免白跑一次浏览器。
+const source = resolveFrozenSourceBundle();
+console.log(`源 bundle sha256 = ${source.sha256}  (重算校验通过 = 冻结锚点)`);
+console.log(`源文件: ${source.fixturePath}`);
+
 const server = await preview({ root, preview: { port: PORT, strictPort: true } });
 const url = `http://localhost:${PORT}/?bench=1&scale=${scale}&mode=${mode}&duration=${duration}`;
 
@@ -51,14 +61,26 @@ try {
     timeout: 90_000,
   });
   const report = await page.evaluate(() => (window as BenchWindow).__canvasPerfReport);
-  console.log('=== browser perf report ===');
-  console.log(JSON.stringify(report, null, 2));
+
+  // 分层：metadata = 本次测量基于哪份基线；payload = 浏览器实际测到了什么。
+  const envelope = {
+    metadata: {
+      producer: 'spike/canvas/scripts/browser-perf.ts',
+      recordedAt: new Date().toISOString(),
+      sourceBundleSha256: source.sha256,
+      sourceBundleFrozenAnchorSha256: FROZEN_SOURCE_BUNDLE_SHA256,
+    },
+    payload: report ?? null,
+  };
+
+  console.log('=== browser perf envelope ===');
+  console.log(JSON.stringify(envelope, null, 2));
 
   const out = process.env.BENCH_OUT;
-  if (out && report) {
+  if (out) {
     const target = path.resolve(process.cwd(), out);
-    writeFileSync(target, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
-    console.log(`report written to ${out}`);
+    writeFileSync(target, `${JSON.stringify(envelope, null, 2)}\n`, 'utf8');
+    console.log(`envelope written to ${out}`);
   }
 } finally {
   if (browser) await browser.close();

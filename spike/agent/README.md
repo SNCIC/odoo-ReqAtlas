@@ -17,6 +17,7 @@
 | `src/guard/project-bundle.ts` | 把草案变更投影到 bundle **深拷贝**（不动原 bundle），产出结构性 finding |
 | `src/guard/domain-guard.ts` | 结构门禁 + 复用 `@reqatlas/testkit#validateBundle` 的语义规则 |
 | `src/draft/` | 内存 DraftStore + `applyDraft`（逐项选择 → ChangeSet，无写库） |
+| `src/artifacts.ts` | 机器可读产物的来源信封（**重算**并记录 `sourceBundleSha256`，不抄常量） |
 | `src/orchestrator.ts` | AgentRun 状态机、超时/取消、一次修复、有界追问、预算阻断 |
 | `src/golden/` | 四个中文金样例与确定性规划器 |
 | `scripts/golden-run.ts` | 一条命令跑金样例端到端 |
@@ -36,6 +37,12 @@ pnpm --filter @reqatlas/spike-agent golden -- --scenario=role-conflict
 可选样例 id：`discount-approval`（折扣审批）、`credit-exception`（信用异常）、
 `purchase-qc`（采购质检）、`role-conflict`（职责冲突）。
 产物写入 `spike/agent/out/`（`change-draft.<id>.json` / `change-set.<id>.json`，仅文件，不写数据库）。
+
+产物为**来源信封**：`{ metadata, payload }`。`metadata.sourceBundleSha256` **重算**自源 bundle 字节
+（`src/artifacts.ts` 的 `buildArtifactEnvelope`，非从 `anchor.ts` 常量抄写），与 `basedOnRevision` 并列，
+使产物**自证源自冻结基线**；`payload` 保持契约原样、可被 Schema Guard 直接校验。元数据只记录相对路径
+（`sourceBundlePath = demo-trade/model-bundle.json`），不写本机绝对路径。
+`artifact.test.ts` 与 `integrity.test.ts` 断言「产物记录哈希 == 重算值 == 冻结锚点」三者一致。
 
 四门禁：
 

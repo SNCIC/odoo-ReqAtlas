@@ -7,39 +7,19 @@
  * 运行：`pnpm --filter @reqatlas/spike-canvas perf`
  * 数据源：真实 fixture（testkit Schema 校验）+ 程序化放大副本（×6 / ×15 / ×30）。
  */
-import { createHash } from 'node:crypto';
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { resolveFixturePath } from '@reqatlas/testkit/fixtures';
 import { projectBundle, type LayoutMode, type ProjectBundleOptions } from '../src/adapter';
 import type { ModelBundle } from '../src/domain';
 import { loadDemoTradeBundleNode } from '../src/load-node';
 import { amplifyBundle } from '../src/scale';
+import { resolveFrozenSourceBundle } from './source-bundle';
 
-/** 冻结基线锚点：仅用于**与重算值比对**；写入产物的永远是重算值。 */
-const FROZEN_SOURCE_BUNDLE_SHA256 =
-  '1a54c6e3158fb2d7a079fad244e30fd774c6b453e06d3859785978a184e03c62';
-
-/** 本脚本目录 → 本包根 → `perf/`（仅本脚本局部需要，不引入共享常量）。 */
+/** 本脚本目录 → 本包根 → `perf/`（本脚本局部；按裁定不引入共享的仓库根常量）。 */
 const HERE_DIR = path.dirname(fileURLToPath(import.meta.url));
 const PERF_DIR = path.join(HERE_DIR, '..', 'perf');
-
-/**
- * 重算源 bundle 的 sha256（读真实字节），并与冻结锚点比对；不一致直接抛错。
- * 产物的 `sourceBundleSha256` 使用该**重算值**，使产物能自证源自冻结基线。
- */
-function assertFrozenSourceBundle(): { sha256: string; fixturePath: string } {
-  const fixturePath = resolveFixturePath('demo-trade/model-bundle.json');
-  const sha256 = createHash('sha256').update(readFileSync(fixturePath)).digest('hex');
-  if (sha256 !== FROZEN_SOURCE_BUNDLE_SHA256) {
-    throw new Error(
-      `源 bundle 哈希与冻结基线不一致（fixture 可能已被改动）：\n  实际=${sha256}\n  冻结=${FROZEN_SOURCE_BUNDLE_SHA256}`,
-    );
-  }
-  return { sha256, fixturePath };
-}
 
 type Sample = {
   n: number;
@@ -132,7 +112,7 @@ function fmt(s: Sample): string {
 }
 
 function main(): void {
-  const source = assertFrozenSourceBundle();
+  const source = resolveFrozenSourceBundle();
   const base = loadDemoTradeBundleNode();
 
   const scales: { factor: number; iterations: number; warmup: number }[] = [

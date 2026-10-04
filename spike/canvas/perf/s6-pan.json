@@ -1,35 +1,43 @@
 {
-  "mode": "pan",
-  "scaleFactor": 6,
-  "nodeCount": 198,
-  "edgeCount": 324,
-  "frames": {
-    "sampleCount": 189,
-    "durationMs": 5014,
-    "frameMsP50": 33.3,
-    "frameMsP95": 49.9,
-    "frameMsMax": 50.1,
-    "fpsMean": 37.8,
-    "fpsP05": 20
+  "metadata": {
+    "producer": "spike/canvas/scripts/browser-perf.ts",
+    "recordedAt": "2026-10-04T09:53:56.518Z",
+    "sourceBundleSha256": "1a54c6e3158fb2d7a079fad244e30fd774c6b453e06d3859785978a184e03c62",
+    "sourceBundleFrozenAnchorSha256": "1a54c6e3158fb2d7a079fad244e30fd774c6b453e06d3859785978a184e03c62"
   },
-  "longTasks": {
-    "supported": true,
-    "count": 2,
-    "totalMs": 244,
-    "maxMs": 155
-  },
-  "memoryBefore": {
-    "usedMb": 15.4,
-    "totalMb": 26.3,
-    "limitMb": 3585.8
-  },
-  "memoryAfter": {
-    "usedMb": 15.4,
-    "totalMb": 26.3,
-    "limitMb": 3585.8
-  },
-  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
-  "hardwareConcurrency": 32,
-  "startedAt": "2026-10-04T09:28:01.139Z",
-  "notes": "合成平移：每帧 setViewport 仅振荡 x/y（zoom 固定为 1），非真实人类输入。"
+  "payload": {
+    "mode": "pan",
+    "scaleFactor": 6,
+    "nodeCount": 198,
+    "edgeCount": 324,
+    "frames": {
+      "sampleCount": 196,
+      "durationMs": 5031,
+      "frameMsP50": 33.2,
+      "frameMsP95": 33.4,
+      "frameMsMax": 50,
+      "fpsMean": 39.1,
+      "fpsP05": 29.9
+    },
+    "longTasks": {
+      "supported": true,
+      "count": 2,
+      "totalMs": 245,
+      "maxMs": 157
+    },
+    "memoryBefore": {
+      "usedMb": 15.4,
+      "totalMb": 26.3,
+      "limitMb": 3585.8
+    },
+    "memoryAfter": {
+      "usedMb": 15.4,
+      "totalMb": 26.3,
+      "limitMb": 3585.8
+    },
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+    "hardwareConcurrency": 32,
+    "startedAt": "2026-10-04T09:53:56.477Z",
+    "notes": "合成平移：每帧 setViewport 仅振荡 x/y（zoom 固定为 1），非真实人类输入。"
+  }
 }

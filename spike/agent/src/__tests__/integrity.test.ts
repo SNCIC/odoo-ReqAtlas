@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { DEMO_TRADE_BUNDLE_BYTES, DEMO_TRADE_BUNDLE_SHA256 } from '../anchor';
+import { buildArtifactEnvelope } from '../artifacts';
 import { applyDraft } from '../draft/apply';
 import { createSchemaGuard } from '../guard/schema-guard';
 import { createGoldenProvider, GOLDEN_SCENARIOS } from '../golden/scenarios';
@@ -32,6 +33,18 @@ describe('模型无写权限：冻结 bundle 前后一致', () => {
       expect(draft, `样例 ${scenario.id} 应产出草案`).toBeDefined();
       const opIds = (draft!.changes ?? []).map((c) => c.operationId);
 
+      // 产物来源元数据：记录的哈希必须 == 重算值 == 冻结锚点。
+      const draftEnvelope = buildArtifactEnvelope({
+        kind: 'change-draft',
+        scenarioId: scenario.id,
+        basedOnRevision: draft!.basedOnRevision,
+        bundlePath,
+        payload: draft!,
+      });
+      expect(draftEnvelope.metadata.sourceBundleSha256).toBe(sha256File(bundlePath));
+      expect(draftEnvelope.metadata.sourceBundleSha256).toBe(DEMO_TRADE_BUNDLE_SHA256);
+      expect(schemaGuard.validateDraft(draftEnvelope.payload).valid).toBe(true);
+
       if (draft!.validation.blocking.length > 0) {
         // 含阻断项（职责冲突）→ 不可应用，证实「阻断项不可 apply」。
         const refused = applyDraft({
@@ -60,6 +73,17 @@ describe('模型无写权限：冻结 bundle 前后一致', () => {
       const validated = schemaGuard.validateChangeSet(result.changeSet);
       expect(validated.valid, validated.errors.join('; ')).toBe(true);
       appliedTotal += accepted.length;
+
+      // ChangeSet 产物的来源元数据同样必须 == 重算值 == 冻结锚点。
+      const changeSetEnvelope = buildArtifactEnvelope({
+        kind: 'change-set',
+        scenarioId: scenario.id,
+        basedOnRevision: draft!.basedOnRevision,
+        bundlePath,
+        payload: result.changeSet!,
+      });
+      expect(changeSetEnvelope.metadata.sourceBundleSha256).toBe(sha256File(bundlePath));
+      expect(changeSetEnvelope.metadata.sourceBundleSha256).toBe(DEMO_TRADE_BUNDLE_SHA256);
     }
 
     expect(appliedTotal).toBeGreaterThan(0);
