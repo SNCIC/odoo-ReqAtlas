@@ -1,0 +1,94 @@
+{
+  "reason": "把财务（复用 ROLE-003）加入折扣审批作为被咨询方，并新增一个由销售经理负责的折扣财务复核事项。",
+  "source": {
+    "type": "agent",
+    "referenceIds": [
+      "draft_discount_approval"
+    ]
+  },
+  "operations": [
+    {
+      "operationId": "op_1",
+      "op": "link",
+      "targetType": "model_relation",
+      "tempId": "tmp_rel_consult_finance",
+      "before": null,
+      "after": {
+        "kind": "consulted_C",
+        "fromId": "ROLE-003",
+        "toId": "ACT-003"
+      },
+      "reason": "用户要求把财务加入折扣审批（被咨询）",
+      "sourceRefs": [
+        {
+          "type": "user_input",
+          "id": "msg_1"
+        }
+      ],
+      "confidenceState": "user_statement"
+    },
+    {
+      "operationId": "op_2",
+      "op": "create",
+      "targetType": "model_object",
+      "tempId": "tmp_activity_discount_recheck",
+      "before": null,
+      "after": {
+        "kind": "activity",
+        "code": "ACT-011",
+        "title": "折扣财务复核",
+        "state": "draft",
+        "sourceStatus": "user_statement",
+        "payload": {}
+      },
+      "reason": "折扣超过 10% 后需财务复核",
+      "sourceRefs": [
+        {
+          "type": "user_input",
+          "id": "msg_1"
+        }
+      ],
+      "confidenceState": "user_statement"
+    },
+    {
+      "operationId": "op_3",
+      "op": "link",
+      "targetType": "model_relation",
+      "tempId": "tmp_rel_recheck_r",
+      "before": null,
+      "after": {
+        "kind": "performs_R",
+        "fromId": "ROLE-003",
+        "toId": "tmp_activity_discount_recheck"
+      },
+      "reason": "财务执行折扣复核",
+      "sourceRefs": [
+        {
+          "type": "user_input",
+          "id": "msg_1"
+        }
+      ],
+      "confidenceState": "user_statement"
+    },
+    {
+      "operationId": "op_4",
+      "op": "link",
+      "targetType": "model_relation",
+      "tempId": "tmp_rel_recheck_a",
+      "before": null,
+      "after": {
+        "kind": "accountable_A",
+        "fromId": "ROLE-002",
+        "toId": "tmp_activity_discount_recheck"
+      },
+      "reason": "销售经理对折扣复核最终负责",
+      "sourceRefs": [
+        {
+          "type": "user_input",
+          "id": "msg_1"
+        }
+      ],
+      "confidenceState": "user_statement"
+    }
+  ]
+}

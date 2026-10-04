@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "model-bundle.ref.json",
+  "title": "ModelBundle (reference)",
+  "description": "ModelBundle 的引用说明，本文件不重复完整定义。权威定义（运行时 zod schema）位于 packages/testkit/src/model-bundle.schema.ts 的 modelBundleSchema（由 teammate sample 拥有）。本仓库的 OpenAPI 仅以本引用占位；生成的客户端类型与 JSON Schema 必须由该权威定义派生，禁止在本目录手工维护副本。",
+  "type": "object",
+  "x-authoritative-source": "packages/testkit/src/model-bundle.schema.ts#modelBundleSchema",
+  "x-synced-at": "2026-10-04",
+  "x-top-level-fields": [
+    "projectId",
+    "projectRevision",
+    "modelObject",
+    "modelRelation",
+    "view",
+    "viewLayout",
+    "evidence",
+    "evidenceLink"
+  ],
+  "x-evidence-note": "evidence / evidenceLink 是必填的独立顶层集合（经 team-lead 批准的返工：证据从 data_object 拆分为独立实体；样本 demo-trade 中 evidence=3、evidenceLink=17）。原 3 个 EV-* data_object 与 supported_by 的证据语义改由 evidenceLink 承载；supported_by 仍保留在 relationKind 枚举中，但样本不再用它表达证据。字段级细节以权威 zod schema 为准，本 ref 不复制。",
+  "x-payload-note": "modelObject.payload 为自由 JSON（Record<string, unknown>）。样本在 payload 级引入 payload.templateOrigin={packageId,itemKey} 与 payload.templateCandidate:boolean；这属 payload 约定，不改变顶层字段，本 ref 不为其增加字段。",
+  "x-derivation-rule": "该 zod schema 是 demo-trade / demo-manufacturing / 四个 M0 Spike 的唯一契约来源；docs/api 不复制其字段细节，仅持有引用与来源路径。",
+  "x-note": "如需在 docs/api 落一份可直接 $ref 的 JSON Schema，应由 packages/contracts 的生成流程从 modelBundleSchema 产出，并纳入契约测试（OpenAPI 校验 + 客户端生成无 diff）。生成约束（据 sample 知会）：(1) evidence / evidenceLink 为必填数组，生成物须出现在 required 中；(2) modelObject.payload 为自由 JSON，生成物须保持开放式 object，不得加 additionalProperties:false。"
+}

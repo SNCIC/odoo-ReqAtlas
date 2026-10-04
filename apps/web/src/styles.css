@@ -1,0 +1,53 @@
+:root {
+  color-scheme: light dark;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    'Microsoft YaHei',
+    sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+
+h1 {
+  font-size: 1.75rem;
+  margin: 0 0 0.25rem;
+}
+
+.subtitle {
+  color: #94a3b8;
+  margin-top: 0;
+}
+
+.probe {
+  margin-top: 2rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid #334155;
+  border-radius: 0.75rem;
+  background: #1e293b;
+}
+
+.probe h2 {
+  font-size: 1rem;
+  margin-top: 0;
+}
+
+.probe ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.probe-error {
+  color: #f87171;
+}

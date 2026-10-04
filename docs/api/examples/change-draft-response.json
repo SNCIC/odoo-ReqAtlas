@@ -1,0 +1,60 @@
+{
+  "draftId": "draft_123",
+  "basedOnRevision": 41,
+  "scope": {
+    "type": "scenario",
+    "id": "scn_123"
+  },
+  "intent": "create",
+  "assumptions": [],
+  "questions": [
+    {
+      "id": "q_1",
+      "text": "折扣超过阈值被拒绝后，报价单如何处理？",
+      "reason": "决定异常分支的去向，影响流程完整性",
+      "blocking": false
+    }
+  ],
+  "changes": [
+    {
+      "operationId": "op_1",
+      "op": "create",
+      "targetType": "model_object",
+      "tempId": "tmp_decision_1",
+      "before": null,
+      "after": {
+        "kind": "decision",
+        "title": "折扣是否超过 10%",
+        "payload": {
+          "expression": "折扣率 > 10%"
+        }
+      },
+      "reason": "用户明确给出条件分支",
+      "sourceRefs": [
+        {
+          "type": "user_input",
+          "id": "msg_1"
+        }
+      ],
+      "confidenceState": "user_statement"
+    }
+  ],
+  "sources": [
+    {
+      "type": "user_input",
+      "id": "msg_1"
+    }
+  ],
+  "validation": {
+    "blocking": [],
+    "warnings": [
+      {
+        "ruleCode": "HANDOFF_NO_OBJECT",
+        "severity": "warn",
+        "objectIds": ["tmp_decision_1"],
+        "message": "跨岗位交接未说明传递物：审批所需的报价单如何交给销售经理尚未明确。"
+      }
+    ]
+  },
+  "summary": "新增一个折扣判断节点，用于区分 10% 以内的自动确认与超过阈值的审批分支。"
+}

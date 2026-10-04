@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "common-defs.json",
+  "title": "CommonDefinitions",
+  "description": "跨 schema 共享的枚举定义（单一事实源）。change-set.json / change-draft.json / agent-run.json 通过 $ref 引用本文件，避免同一语义枚举存在两份副本导致漂移。本文件自身不定义实体，仅提供 $defs。",
+  "$defs": {
+    "OperationKind": {
+      "type": "string",
+      "enum": ["create", "update", "delete", "link"],
+      "description": "变更操作类型；create/update/delete 作用于对象，link 用于建立关系。"
+    },
+    "TargetType": {
+      "type": "string",
+      "enum": ["model_object", "model_relation", "view", "view_layout"],
+      "description": "变更操作的目标类型。"
+    },
+    "ScopeType": {
+      "type": "string",
+      "enum": ["object", "scenario", "project"],
+      "description": "Agent 任务与变更的作用范围类型。"
+    }
+  }
+}

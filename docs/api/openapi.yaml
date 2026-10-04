@@ -1,0 +1,953 @@
+openapi: 3.1.0
+servers:
+  - url: /api/v1
+    description: 统一 Base URL（实施方案 §5.1）。生产与本地均挂载在该前缀下。
+info:
+  title: 需求调研工作台 API
+  version: 0.1.0
+  summary: M0 起始契约（13 个端点）
+  description: |
+    M0-06 契约先行草案，覆盖实施方案 §5.1 通用协议与 §5.2 路由总表中的
+    13 个 M0/M2 起始端点。
+
+    契约先于实现：本文件与 `docs/api/schemas/*.json`、`docs/api/examples/*.json`
+    是唯一事实源的派生入口；客户端必须由契约生成。
+
+    ## 通用协议
+    - Base URL：`/api/v1`；JSON UTF-8；文件走预签名上传。
+    - 认证：OIDC Access Token（bearer）；API 校验 issuer / audience。
+    - 并发：语义写入必须携带 `If-Match: "rev-{n}"`。
+    - 幂等：POST / 命令必须携带 `Idempotency-Key`。
+    - 追踪：所有响应返回 `X-Request-Id`。
+    - 分页：`cursor` + `limit`，禁止 offset。
+    - 错误：`application/problem+json` + 稳定 `code`（见 `schemas/error-code.json`）。
+    - 异步：`202` + `jobId`；状态经 SSE 推送（见 `events.md`）。
+    - 成功响应统一包装：`{ data, meta: { requestId, projectRevision } }`。
+  license:
+    name: Proprietary
+    identifier: LicenseRef-Proprietary
+security:
+  - oidcBearer: []
+tags:
+  - name: System
+    description: 健康检查与运行状态。
+  - name: Projects
+    description: 项目与场景。
+  - name: Model
+    description: 统一模型读取（ModelBundle）。
+  - name: ChangeSets
+    description: 手工/导入差异集，模型写入的唯一凭证。
+  - name: Agent
+    description: 受控 Agent 任务（只产出 ChangeDraft）。
+  - name: ChangeDrafts
+    description: Agent 差异草案的审阅、校验与应用。
+  - name: Snapshots
+    description: 不可变快照。
+x-common-protocol:
+  baseUrl: /api/v1
+  auth: oidc-bearer
+  concurrencyHeader: If-Match
+  idempotencyHeader: Idempotency-Key
+  traceHeader: X-Request-Id
+  pagination:
+    style: cursor
+    params: [cursor, limit]
+    forbid: [offset, page]
+  errorMediaType: application/problem+json
+  asyncStatus: 202
+  successEnvelope:
+    data: object
+    meta:
+      requestId: 'string (pattern ^req_[A-Za-z0-9_-]+$；与 problem.requestId、X-Request-Id 头同一约束)'
+      projectRevision: 'integer (minimum 0)'
+paths:
+  /health:
+    get:
+      tags: [System]
+      operationId: getHealth
+      summary: 健康检查
+      description: 返回服务与依赖健康状态；不含业务数据。公开端点，无需认证。
+      security: []
+      responses:
+        '200':
+          description: 服务健康
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthEnvelope'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /projects:
+    post:
+      tags: [Projects]
+      operationId: createProject
+      summary: 创建项目
+      description: 幂等创建项目，默认状态为 draft。
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectCreate'
+      responses:
+        '201':
+          description: 已创建
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectEnvelope'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /projects/{id}:
+    get:
+      tags: [Projects]
+      operationId: getProject
+      summary: 获取项目概览
+      description: 返回项目、当前用户权限与 projectRevision。`cursor`/`limit` 用于分页返回的最近变更集预览。
+      parameters:
+        - $ref: '#/components/parameters/PathProjectId'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: 项目详情
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectEnvelope'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /scenarios/{id}/model:
+    get:
+      tags: [Model]
+      operationId: getScenarioModel
+      summary: 读取场景模型
+      description: 返回 ModelBundle + revision。ModelBundle 的权威定义在 packages/testkit/src/model-bundle.schema.ts。
+      parameters:
+        - $ref: '#/components/parameters/PathScenarioId'
+      responses:
+        '200':
+          description: 场景模型
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelBundleEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /projects/{id}/change-sets:
+    post:
+      tags: [ChangeSets]
+      operationId: createChangeSet
+      summary: 提交变更集
+      description: |
+        提交手工/导入差异（§5.3 手工建模链路）。先校验 Schema、权限、If-Match 与幂等键，
+        再解析 tempId；全部操作在单事务内应用，任一阻断规则失败整体回滚。
+        请求示例：docs/api/examples/change-set-request.json（由契约测试校验）。
+      parameters:
+        - $ref: '#/components/parameters/PathProjectId'
+        - $ref: '#/components/parameters/IfMatch'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/change-set.json'
+      responses:
+        '200':
+          description: 已应用
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeSetEnvelope'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/DomainRuleBlocked'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /projects/{id}/agent-runs:
+    post:
+      tags: [Agent]
+      operationId: createAgentRun
+      summary: 创建 Agent 任务
+      description: 创建受控 Agent 任务，异步返回 jobId/runId；状态经 SSE agent.run.updated 推送。
+      parameters:
+        - $ref: '#/components/parameters/PathProjectId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/agent-run.json'
+      responses:
+        '202':
+          description: 已受理
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentRunAcceptedEnvelope'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /agent-runs/{id}:
+    get:
+      tags: [Agent]
+      operationId: getAgentRun
+      summary: 查询 Agent 任务
+      description: 返回任务状态与追问；不返回越权上下文。
+      parameters:
+        - $ref: '#/components/parameters/PathAgentRunId'
+      responses:
+        '200':
+          description: 任务状态
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentRunEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /agent-runs/{id}/answers:
+    post:
+      tags: [Agent]
+      operationId: answerAgentRun
+      summary: 回答澄清问题
+      description: 提交追问的回答，继续同一 run。
+      parameters:
+        - $ref: '#/components/parameters/PathAgentRunId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [answers]
+              properties:
+                answers:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: object
+                    additionalProperties: false
+                    required: [text]
+                    properties:
+                      questionId:
+                        type: string
+                      text:
+                        type: string
+                        minLength: 1
+      responses:
+        '200':
+          description: 已继续处理
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentRunEnvelope'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /change-drafts/{id}:
+    get:
+      tags: [ChangeDrafts]
+      operationId: getChangeDraft
+      summary: 读取差异草案
+      description: 按操作审阅草案；返回结构遵循产品设计文档附录 C。
+      parameters:
+        - $ref: '#/components/parameters/PathChangeDraftId'
+      responses:
+        '200':
+          description: 差异草案
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeDraftEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /change-drafts/{id}/validate:
+    post:
+      tags: [ChangeDrafts]
+      operationId: validateChangeDraft
+      summary: 校验差异草案
+      description: 重跑业务校验；返回 blocking/warnings findings。校验不通过以 200 返回结果，而非错误。
+      parameters:
+        - $ref: '#/components/parameters/PathChangeDraftId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                operationIds:
+                  type: array
+                  description: 仅校验指定操作；缺省校验全部。
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: 校验结果
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FindingsEnvelope'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /change-drafts/{id}/apply:
+    post:
+      tags: [ChangeDrafts]
+      operationId: applyChangeDraft
+      summary: 应用差异草案
+      description: 接受所选操作；按当前 revision 再次校验后转为 ChangeSet 应用。
+      parameters:
+        - $ref: '#/components/parameters/PathChangeDraftId'
+        - $ref: '#/components/parameters/IfMatch'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [operationIds]
+              properties:
+                operationIds:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: 已应用
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeSetEnvelope'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/DomainRuleBlocked'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /snapshots:
+    post:
+      tags: [Snapshots]
+      operationId: createSnapshot
+      summary: 创建不可变快照
+      description: 创建评审/演示/文档快照，异步返回 jobId；快照创建后不可变。
+      parameters:
+        - $ref: '#/components/parameters/IfMatch'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [projectId, type]
+              properties:
+                projectId:
+                  type: string
+                  minLength: 1
+                scenarioId:
+                  type: string
+                type:
+                  type: string
+                  enum: [review, presentation, document]
+                label:
+                  type: string
+      responses:
+        '202':
+          description: 已受理
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SnapshotAcceptedEnvelope'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/DomainRuleBlocked'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /snapshots/{id}/bundle:
+    get:
+      tags: [Snapshots]
+      operationId: getSnapshotBundle
+      summary: 读取快照模型
+      description: 返回只读 ModelBundle；快照内容不随编辑变化。
+      parameters:
+        - $ref: '#/components/parameters/PathSnapshotId'
+      responses:
+        '200':
+          description: 快照模型
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelBundleEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+components:
+  securitySchemes:
+    oidcBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OIDC Access Token；API 校验 issuer / audience。
+  headers:
+    XRequestId:
+      description: 请求追踪 ID；所有响应必返回，与日志/审计对账。
+      schema:
+        type: string
+        pattern: '^req_[A-Za-z0-9_-]+$'
+    ETag:
+      description: 当前 projectRevision 的强校验值，形如 "rev-42"；用于后续 If-Match。
+      schema:
+        type: string
+        pattern: '^"rev-[0-9]+"$'
+  parameters:
+    PathProjectId:
+      name: id
+      in: path
+      required: true
+      description: 项目 ID。
+      schema:
+        type: string
+        minLength: 1
+    PathScenarioId:
+      name: id
+      in: path
+      required: true
+      description: 场景 ID。
+      schema:
+        type: string
+        minLength: 1
+    PathAgentRunId:
+      name: id
+      in: path
+      required: true
+      description: Agent 任务 ID。
+      schema:
+        type: string
+        minLength: 1
+    PathChangeDraftId:
+      name: id
+      in: path
+      required: true
+      description: 差异草案 ID。
+      schema:
+        type: string
+        minLength: 1
+    PathSnapshotId:
+      name: id
+      in: path
+      required: true
+      description: 快照 ID。
+      schema:
+        type: string
+        minLength: 1
+    IfMatch:
+      name: If-Match
+      in: header
+      required: true
+      description: 乐观并发控制；语义写入必填，值形如 "rev-41"。不匹配返回 409 REVISION_CONFLICT。
+      schema:
+        type: string
+        pattern: '^"rev-[0-9]+"$'
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: 幂等键；POST/命令必填。同键同请求返回原结果，同键不同请求返回 409 IDEMPOTENCY_MISMATCH。
+      schema:
+        type: string
+        minLength: 8
+        maxLength: 128
+    Cursor:
+      name: cursor
+      in: query
+      required: false
+      description: 不透明分页游标；禁止使用 offset。
+      schema:
+        type: string
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: 单页数量上限。
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 200
+        default: 50
+  responses:
+    BadRequest:
+      description: 请求体或参数校验失败（VALIDATION_FAILED）
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/problem+json:
+          schema:
+            $ref: './schemas/problem.json'
+    Unauthorized:
+      description: 未认证或令牌无效（AUTH_REQUIRED）
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/problem+json:
+          schema:
+            $ref: './schemas/problem.json'
+    Forbidden:
+      description: 无权限（PERMISSION_DENIED）
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/problem+json:
+          schema:
+            $ref: './schemas/problem.json'
+    NotFound:
+      description: 资源不存在或不可见（RESOURCE_NOT_FOUND）
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/problem+json:
+          schema:
+            $ref: './schemas/problem.json'
+    Conflict:
+      description: 并发/幂等/基线冲突（REVISION_CONFLICT | IDEMPOTENCY_MISMATCH | BASELINE_LOCKED）
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/problem+json:
+          schema:
+            $ref: './schemas/problem.json'
+    DomainRuleBlocked:
+      description: 领域规则阻断（DOMAIN_RULE_BLOCKED）；context.findings[] 见 domain-rules.md。
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/problem+json:
+          schema:
+            $ref: './schemas/problem.json'
+    RateLimited:
+      description: 触发限流（RATE_LIMITED）
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+        Retry-After:
+          description: 建议重试等待秒数。
+          schema:
+            type: integer
+            minimum: 0
+      content:
+        application/problem+json:
+          schema:
+            $ref: './schemas/problem.json'
+    DependencyUnavailable:
+      description: 依赖不可用（DEPENDENCY_UNAVAILABLE）；保留草稿，稍后人工重试。
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/problem+json:
+          schema:
+            $ref: './schemas/problem.json'
+  schemas:
+    Meta:
+      type: object
+      required: [requestId]
+      additionalProperties: false
+      properties:
+        requestId:
+          type: string
+          pattern: '^req_[A-Za-z0-9_-]+$'
+        projectRevision:
+          type: integer
+          minimum: 0
+          description: 响应时的项目修订号；健康检查等非项目端点可省略。
+        nextCursor:
+          type: [string, 'null']
+          description: 下一页游标；无更多数据时为 null。
+    HealthData:
+      type: object
+      required: [status, version, time]
+      additionalProperties: false
+      properties:
+        status:
+          type: string
+          enum: [ok, degraded]
+        version:
+          type: string
+        time:
+          type: string
+          format: date-time
+    HealthEnvelope:
+      type: object
+      required: [data, meta]
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/HealthData'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    ProjectCreate:
+      type: object
+      required: [code, name]
+      additionalProperties: false
+      properties:
+        code:
+          type: string
+          pattern: '^[A-Z][A-Z0-9_-]{1,31}$'
+          description: 租户内唯一项目编号。
+        name:
+          type: string
+          minLength: 1
+        industry:
+          type: string
+        templateId:
+          type: string
+    RecentChangeSet:
+      type: object
+      description: 持久化的 ChangeSet 生命周期视图，status ∈ {draft, applied, rejected}。apply 成功响应的 ChangeSetResult 是它的窄化视图（status 恒为 applied），二者不是两个独立类型。
+      required: [id, status, reason, committedAt]
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum: [draft, applied, rejected]
+        reason:
+          type: string
+        actor:
+          type: string
+        committedAt:
+          type: string
+          format: date-time
+    Project:
+      type: object
+      required: [id, code, name, status, projectRevision]
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+          pattern: '^[A-Z][A-Z0-9_-]{1,31}$'
+          description: 项目编号；与 ProjectCreate.code 同一约束（租户内唯一）。
+        name:
+          type: string
+        industry:
+          type: string
+        status:
+          type: string
+          enum: [draft, researching, reviewing, pending_approval, baselined, archived]
+        projectRevision:
+          type: integer
+          minimum: 0
+        permissions:
+          type: array
+          items:
+            type: string
+          description: 当前用户在该项目上的权限集合。
+        recentChangeSets:
+          type: array
+          description: 最近变更集预览，按 cursor/limit 分页。
+          items:
+            $ref: '#/components/schemas/RecentChangeSet'
+    ProjectEnvelope:
+      type: object
+      required: [data, meta]
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/Project'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    ModelBundleEnvelope:
+      type: object
+      required: [data, meta]
+      additionalProperties: false
+      properties:
+        data:
+          $ref: './schemas/model-bundle.ref.json'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    ChangeSetResult:
+      type: object
+      description: ChangeSet 的 apply 成功视图，status 恒为 `applied`。它是持久化实体 RecentChangeSet（status ∈ {draft, applied, rejected}）的窄化视图，二者不是两个独立类型。
+      required: [changeSetId, status, baseSeq, projectRevision]
+      additionalProperties: false
+      properties:
+        changeSetId:
+          type: string
+        status:
+          type: string
+          enum: [applied]
+        baseSeq:
+          type: integer
+          minimum: 0
+        projectRevision:
+          type: integer
+          minimum: 0
+        operationIdMap:
+          type: object
+          description: operationId → 真实对象/关系 ID 映射（tempId 解析结果）。
+          additionalProperties:
+            type: string
+    ChangeSetEnvelope:
+      type: object
+      required: [data, meta]
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/ChangeSetResult'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    AgentRunAccepted:
+      type: object
+      required: [jobId, runId]
+      additionalProperties: false
+      properties:
+        jobId:
+          type: string
+        runId:
+          type: string
+    AgentRunAcceptedEnvelope:
+      type: object
+      required: [data, meta]
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/AgentRunAccepted'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    AgentRunEnvelope:
+      type: object
+      required: [data, meta]
+      additionalProperties: false
+      properties:
+        data:
+          $ref: './schemas/agent-run.json#/$defs/AgentRun'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    ChangeDraftEnvelope:
+      type: object
+      required: [data, meta]
+      additionalProperties: false
+      properties:
+        data:
+          $ref: './schemas/change-draft.json'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    FindingsEnvelope:
+      type: object
+      required: [data, meta]
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required: [draftId, basedOnRevision, findings, blocking]
+          additionalProperties: false
+          properties:
+            draftId:
+              type: string
+            basedOnRevision:
+              type: integer
+              minimum: 0
+            blocking:
+              type: boolean
+              description: 是否存在 block/error 级阻断项。
+            findings:
+              type: array
+              items:
+                $ref: './schemas/change-draft.json#/$defs/finding'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    SnapshotAccepted:
+      type: object
+      required: [jobId, snapshotId, status]
+      additionalProperties: false
+      properties:
+        jobId:
+          type: string
+        snapshotId:
+          type: string
+        status:
+          type: string
+          enum: [queued, running]
+    SnapshotAcceptedEnvelope:
+      type: object
+      required: [data, meta]
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/SnapshotAccepted'
+        meta:
+          $ref: '#/components/schemas/Meta'

@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: format / lint / typecheck / test / arch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js (baseline 22 LTS)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Format check
+        run: pnpm format:check
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Architecture boundaries
+        run: pnpm arch
+
+  secret-scan:
+    name: secret scan (placeholder)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 占位 job：M1-07 要求"secret scan 占位"。
+      # 真正接入 gitleaks / ggshield 走后续变更单，当前仅做最基本的模式扫描。
+      - name: Placeholder secret pattern scan
+        run: |
+          echo "::notice::secret scan is a placeholder; wire gitleaks/ggshield in a follow-up"
+          if git grep -nEI '(BEGIN (RSA|OPENSSH|EC|PGP) PRIVATE KEY|AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{20,})' -- . ':!pnpm-lock.yaml'; then
+            echo "::error::potential secret pattern found"
+            exit 1
+          fi
+          echo "no obvious secret patterns found"

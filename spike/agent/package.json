@@ -1,0 +1,27 @@
+{
+  "name": "@reqatlas/spike-agent",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "M0-05/M0-06 Spike：受控 Agent 结构化差异草案（Provider Adapter + 最小上下文 + 检索复用 + Schema/Domain 双校验 + 无写权限 apply）",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "eslint src scripts",
+    "golden": "tsx scripts/golden-run.ts"
+  },
+  "dependencies": {
+    "@reqatlas/testkit": "workspace:*",
+    "ajv": "^8.17.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "vitest": "^3.2.4"
+  }
+}

@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "change-set.json",
+  "title": "ChangeSet",
+  "description": "结构化变更集，是模型写入的唯一凭证（实施方案 §5.3 手工建模链路、§4.2 change_set/change_operation）。全部操作在单事务内应用；任一阻断规则失败整体回滚。请求必须携带 If-Match: \"rev-{n}\" 与 Idempotency-Key 请求头。",
+  "type": "object",
+  "required": ["reason", "source", "operations"],
+  "additionalProperties": false,
+  "properties": {
+    "reason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "description": "本次变更的业务理由，写入审计。"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "operations": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 500,
+      "description": "按顺序稳定应用的操作列表；tempId 在同一 ChangeSet 内解析。",
+      "items": {
+        "$ref": "#/$defs/operation"
+      }
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "required": ["type", "referenceIds"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["manual", "agent", "import", "template", "migration"],
+          "description": "变更来源类型。"
+        },
+        "referenceIds": {
+          "type": "array",
+          "description": "来源对象/证据/草案的引用 ID；无来源可为空数组，但事实型操作在领域校验阶段仍要求 sourceRefs。",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operationId", "op", "targetType"],
+      "properties": {
+        "operationId": {
+          "type": "string",
+          "pattern": "^op_[A-Za-z0-9_-]+$",
+          "description": "ChangeSet 内唯一；响应返回 operationId → 真实 ID 的映射。"
+        },
+        "op": {
+          "$ref": "common-defs.json#/$defs/OperationKind",
+          "description": "create/update/delete 作用于对象；link 用于建立关系。"
+        },
+        "targetType": {
+          "$ref": "common-defs.json#/$defs/TargetType"
+        },
+        "targetId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "已存在对象的稳定 ID（update/delete 必填）。"
+        },
+        "tempId": {
+          "type": "string",
+          "pattern": "^tmp_[A-Za-z0-9_-]+$",
+          "description": "新建对象的临时 ID，仅供同一 ChangeSet 内互相引用，由服务端解析为真实 ID。"
+        },
+        "before": {
+          "type": ["object", "null"],
+          "description": "变更前值。服务端补齐并保存；客户端提供的 before 仅用于冲突提示，不能作为审计事实。"
+        },
+        "after": {
+          "type": ["object", "null"],
+          "description": "变更后值（create/update/link 必填）。"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "sourceRefs": {
+          "type": "array",
+          "description": "事实与推断分离：事实型操作无 sourceRefs 不得进入基线。",
+          "items": {
+            "$ref": "#/$defs/sourceRef"
+          }
+        },
+        "confidenceState": {
+          "$ref": "#/$defs/confidenceState"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["op"],
+            "properties": {
+              "op": {
+                "const": "create"
+              }
+            }
+          },
+          "then": {
+            "required": ["after"],
+            "properties": {
+              "after": {
+                "type": ["object", "null"]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": ["op"],
+            "properties": {
+              "op": {
+                "const": "update"
+              }
+            }
+          },
+          "then": {
+            "required": ["targetId", "after"],
+            "properties": {
+              "targetId": {
+                "type": "string"
+              },
+              "after": {
+                "type": ["object", "null"]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": ["op"],
+            "properties": {
+              "op": {
+                "const": "delete"
+              }
+            }
+          },
+          "then": {
+            "required": ["targetId"],
+            "properties": {
+              "targetId": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": ["op"],
+            "properties": {
+              "op": {
+                "const": "link"
+              }
+            }
+          },
+          "then": {
+            "required": ["after"],
+            "properties": {
+              "after": {
+                "type": ["object", "null"]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "sourceRef": {
+      "type": "object",
+      "required": ["type", "id"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["user_input", "evidence", "object", "material", "knowledge", "template"],
+          "description": "引用来源类别。"
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "confidenceState": {
+      "type": "string",
+      "description": "来源状态（§4.2 source_status）：user_statement/material_extracted/consultant_judgment/agent_inference 不可直接进入基线；confirmed_fact/approved_requirement 可进入。",
+      "enum": [
+        "user_statement",
+        "material_extracted",
+        "consultant_judgment",
+        "agent_inference",
+        "confirmed_fact",
+        "approved_requirement"
+      ]
+    }
+  }
+}

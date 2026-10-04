@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "error-code.json",
+  "title": "ErrorCode",
+  "description": "稳定错误码枚举。权威来源：《需求调研工作台开发方案》v1.0 附录 A（稳定错误码）。客户端应依据 code 分支处理，不得依赖 detail 文案或 HTTP 状态单独判断。\n\n| code | HTTP | 客户端动作 |\n| --- | --- | --- |\n| VALIDATION_FAILED | 400 | 定位字段/规则，不重试原请求 |\n| AUTH_REQUIRED | 401 | 重新登录 |\n| PERMISSION_DENIED | 403 | 提示所需角色，不泄露对象标题 |\n| RESOURCE_NOT_FOUND | 404 | 不可区分越权与不存在 |\n| REVISION_CONFLICT | 409 | 刷新差异后人工合并 |\n| IDEMPOTENCY_MISMATCH | 409 | 同键不同请求，停止 |\n| BASELINE_LOCKED | 409 | 创建变更分支 |\n| DOMAIN_RULE_BLOCKED | 422 | 定位阻断规则 |\n| RATE_LIMITED | 429 | 按 Retry-After 重试 |\n| DEPENDENCY_UNAVAILABLE | 503 | 保留草稿，稍后人工重试 |",
+  "$comment": "附录 A 共列出 10 个错误码；此前任务描述误写为 11 个，team-lead 已于 2026-10-04 裁定采纳 10 个（以附录 A 原文为准），本契约未擅自新增未记录的 code。HTTP 状态映射（机器可读）：{\"VALIDATION_FAILED\":400,\"AUTH_REQUIRED\":401,\"PERMISSION_DENIED\":403,\"RESOURCE_NOT_FOUND\":404,\"REVISION_CONFLICT\":409,\"IDEMPOTENCY_MISMATCH\":409,\"BASELINE_LOCKED\":409,\"DOMAIN_RULE_BLOCKED\":422,\"RATE_LIMITED\":429,\"DEPENDENCY_UNAVAILABLE\":503}",
+  "type": "string",
+  "enum": [
+    "VALIDATION_FAILED",
+    "AUTH_REQUIRED",
+    "PERMISSION_DENIED",
+    "RESOURCE_NOT_FOUND",
+    "REVISION_CONFLICT",
+    "IDEMPOTENCY_MISMATCH",
+    "BASELINE_LOCKED",
+    "DOMAIN_RULE_BLOCKED",
+    "RATE_LIMITED",
+    "DEPENDENCY_UNAVAILABLE"
+  ]
+}

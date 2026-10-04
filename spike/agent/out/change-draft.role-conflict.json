@@ -1,0 +1,55 @@
+{
+  "draftId": "draft_role_conflict",
+  "basedOnRevision": 1,
+  "scope": {
+    "type": "project",
+    "id": "PRJ-TRADE-001"
+  },
+  "intent": "check",
+  "assumptions": [],
+  "questions": [],
+  "changes": [
+    {
+      "operationId": "op_1",
+      "op": "link",
+      "targetType": "model_relation",
+      "tempId": "tmp_rel_conflict_a",
+      "before": null,
+      "after": {
+        "kind": "accountable_A",
+        "fromId": "ROLE-003",
+        "toId": "ACT-003"
+      },
+      "reason": "用户称财务也是折扣审批的最终负责方",
+      "sourceRefs": [
+        {
+          "type": "user_input",
+          "id": "msg_1"
+        }
+      ],
+      "confidenceState": "user_statement"
+    }
+  ],
+  "sources": [
+    {
+      "type": "user_input",
+      "id": "msg_1"
+    }
+  ],
+  "validation": {
+    "blocking": [
+      {
+        "ruleCode": "ACTIVITY_MULTI_A",
+        "severity": "error",
+        "objectIds": [
+          "ACT-003",
+          "ROLE-002",
+          "ROLE-003"
+        ],
+        "message": "活动 ACT-003(折扣审批) 有 2 个 accountable_A，应当恰好 1 个"
+      }
+    ],
+    "warnings": []
+  },
+  "summary": "用户称折扣审批同时由销售经理与财务最终负责，产生多个 A，应阻断并请人工裁定唯一负责人。"
+}

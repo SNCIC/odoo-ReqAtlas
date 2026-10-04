@@ -1,0 +1,1348 @@
+{
+  "schemaVersion": "scene-projection/1",
+  "projectId": "PRJ-TRADE-001",
+  "projectRevision": 1,
+  "sourceBundleSha256": "1a54c6e3158fb2d7a079fad244e30fd774c6b453e06d3859785978a184e03c62",
+  "regions": [
+    {
+      "id": "region-仓储部",
+      "label": "仓储部",
+      "department": "仓储部",
+      "roleObjectIds": [
+        "ROLE-004"
+      ],
+      "actorIds": [
+        "actor-ROLE-004"
+      ],
+      "position": {
+        "x": 28,
+        "y": 0,
+        "z": 0
+      },
+      "size": {
+        "x": 60,
+        "y": 0.4,
+        "z": 5.6
+      }
+    },
+    {
+      "id": "region-外部",
+      "label": "外部",
+      "department": "外部",
+      "roleObjectIds": [
+        "ROLE-006"
+      ],
+      "actorIds": [
+        "actor-ROLE-006"
+      ],
+      "position": {
+        "x": 28,
+        "y": 0,
+        "z": 6
+      },
+      "size": {
+        "x": 60,
+        "y": 0.4,
+        "z": 5.6
+      }
+    },
+    {
+      "id": "region-未分组",
+      "label": "未分组",
+      "department": "未分组",
+      "roleObjectIds": [],
+      "actorIds": [],
+      "position": {
+        "x": 28,
+        "y": 0,
+        "z": 12
+      },
+      "size": {
+        "x": 60,
+        "y": 0.4,
+        "z": 5.6
+      }
+    },
+    {
+      "id": "region-财务部",
+      "label": "财务部",
+      "department": "财务部",
+      "roleObjectIds": [
+        "ROLE-003"
+      ],
+      "actorIds": [
+        "actor-ROLE-003"
+      ],
+      "position": {
+        "x": 28,
+        "y": 0,
+        "z": 18
+      },
+      "size": {
+        "x": 60,
+        "y": 0.4,
+        "z": 5.6
+      }
+    },
+    {
+      "id": "region-采购部",
+      "label": "采购部",
+      "department": "采购部",
+      "roleObjectIds": [
+        "ROLE-005"
+      ],
+      "actorIds": [
+        "actor-ROLE-005"
+      ],
+      "position": {
+        "x": 28,
+        "y": 0,
+        "z": 24
+      },
+      "size": {
+        "x": 60,
+        "y": 0.4,
+        "z": 5.6
+      }
+    },
+    {
+      "id": "region-销售部",
+      "label": "销售部",
+      "department": "销售部",
+      "roleObjectIds": [
+        "ROLE-001",
+        "ROLE-002"
+      ],
+      "actorIds": [
+        "actor-ROLE-001",
+        "actor-ROLE-002"
+      ],
+      "position": {
+        "x": 28,
+        "y": 0,
+        "z": 30
+      },
+      "size": {
+        "x": 60,
+        "y": 0.4,
+        "z": 5.6
+      }
+    }
+  ],
+  "actors": [
+    {
+      "id": "actor-ROLE-001",
+      "sourceObjectId": "ROLE-001",
+      "code": "ROLE-001",
+      "label": "销售员",
+      "department": "销售部",
+      "regionId": "region-销售部",
+      "position": {
+        "x": 26.5,
+        "y": 0,
+        "z": 27.8
+      }
+    },
+    {
+      "id": "actor-ROLE-002",
+      "sourceObjectId": "ROLE-002",
+      "code": "ROLE-002",
+      "label": "销售经理",
+      "department": "销售部",
+      "regionId": "region-销售部",
+      "position": {
+        "x": 29.5,
+        "y": 0,
+        "z": 27.8
+      }
+    },
+    {
+      "id": "actor-ROLE-003",
+      "sourceObjectId": "ROLE-003",
+      "code": "ROLE-003",
+      "label": "财务",
+      "department": "财务部",
+      "regionId": "region-财务部",
+      "position": {
+        "x": 28,
+        "y": 0,
+        "z": 15.8
+      }
+    },
+    {
+      "id": "actor-ROLE-004",
+      "sourceObjectId": "ROLE-004",
+      "code": "ROLE-004",
+      "label": "仓库",
+      "department": "仓储部",
+      "regionId": "region-仓储部",
+      "position": {
+        "x": 28,
+        "y": 0,
+        "z": -2.2
+      }
+    },
+    {
+      "id": "actor-ROLE-005",
+      "sourceObjectId": "ROLE-005",
+      "code": "ROLE-005",
+      "label": "采购",
+      "department": "采购部",
+      "regionId": "region-采购部",
+      "position": {
+        "x": 28,
+        "y": 0,
+        "z": 21.8
+      }
+    },
+    {
+      "id": "actor-ROLE-006",
+      "sourceObjectId": "ROLE-006",
+      "code": "ROLE-006",
+      "label": "客户",
+      "department": "外部",
+      "regionId": "region-外部",
+      "position": {
+        "x": 28,
+        "y": 0,
+        "z": 3.8
+      }
+    }
+  ],
+  "stations": [
+    {
+      "id": "station-EXC-001",
+      "sourceObjectId": "EXC-001",
+      "code": "EXC-001",
+      "label": "审批超时",
+      "stationKind": "exception",
+      "regionId": "region-未分组",
+      "actorId": null,
+      "order": 0,
+      "position": {
+        "x": 0,
+        "y": 0.5,
+        "z": 12
+      }
+    },
+    {
+      "id": "station-EXC-002",
+      "sourceObjectId": "EXC-002",
+      "code": "EXC-002",
+      "label": "信用不足",
+      "stationKind": "exception",
+      "regionId": "region-未分组",
+      "actorId": null,
+      "order": 1,
+      "position": {
+        "x": 4,
+        "y": 0.5,
+        "z": 12
+      }
+    },
+    {
+      "id": "station-START-001",
+      "sourceObjectId": "START-001",
+      "code": "START-001",
+      "label": "询价受理",
+      "stationKind": "start",
+      "regionId": "region-未分组",
+      "actorId": null,
+      "order": 2,
+      "position": {
+        "x": 8,
+        "y": 0.5,
+        "z": 12
+      }
+    },
+    {
+      "id": "station-ACT-003",
+      "sourceObjectId": "ACT-003",
+      "code": "ACT-003",
+      "label": "折扣审批",
+      "stationKind": "activity",
+      "regionId": "region-销售部",
+      "actorId": "actor-ROLE-002",
+      "order": 3,
+      "position": {
+        "x": 12,
+        "y": 0.5,
+        "z": 30
+      }
+    },
+    {
+      "id": "station-ACT-009",
+      "sourceObjectId": "ACT-009",
+      "code": "ACT-009",
+      "label": "信用/逾期特批",
+      "stationKind": "activity",
+      "regionId": "region-财务部",
+      "actorId": "actor-ROLE-003",
+      "order": 4,
+      "position": {
+        "x": 16,
+        "y": 0.5,
+        "z": 18
+      }
+    },
+    {
+      "id": "station-ACT-001",
+      "sourceObjectId": "ACT-001",
+      "code": "ACT-001",
+      "label": "登记线索/询价",
+      "stationKind": "activity",
+      "regionId": "region-销售部",
+      "actorId": "actor-ROLE-002",
+      "order": 5,
+      "position": {
+        "x": 20,
+        "y": 0.5,
+        "z": 30
+      }
+    },
+    {
+      "id": "station-ACT-004",
+      "sourceObjectId": "ACT-004",
+      "code": "ACT-004",
+      "label": "信用检查",
+      "stationKind": "activity",
+      "regionId": "region-财务部",
+      "actorId": "actor-ROLE-003",
+      "order": 6,
+      "position": {
+        "x": 24,
+        "y": 0.5,
+        "z": 18
+      }
+    },
+    {
+      "id": "station-ACT-005",
+      "sourceObjectId": "ACT-005",
+      "code": "ACT-005",
+      "label": "创建销售订单",
+      "stationKind": "activity",
+      "regionId": "region-销售部",
+      "actorId": "actor-ROLE-002",
+      "order": 7,
+      "position": {
+        "x": 28,
+        "y": 0.5,
+        "z": 30
+      }
+    },
+    {
+      "id": "station-ACT-002",
+      "sourceObjectId": "ACT-002",
+      "code": "ACT-002",
+      "label": "编制报价",
+      "stationKind": "activity",
+      "regionId": "region-销售部",
+      "actorId": "actor-ROLE-002",
+      "order": 8,
+      "position": {
+        "x": 32,
+        "y": 0.5,
+        "z": 30
+      }
+    },
+    {
+      "id": "station-DEC-002",
+      "sourceObjectId": "DEC-002",
+      "code": "DEC-002",
+      "label": "客户是否逾期",
+      "stationKind": "decision",
+      "regionId": "region-未分组",
+      "actorId": null,
+      "order": 9,
+      "position": {
+        "x": 36,
+        "y": 0.5,
+        "z": 12
+      }
+    },
+    {
+      "id": "station-ACT-006",
+      "sourceObjectId": "ACT-006",
+      "code": "ACT-006",
+      "label": "仓库发货",
+      "stationKind": "activity",
+      "regionId": "region-仓储部",
+      "actorId": "actor-ROLE-004",
+      "order": 10,
+      "position": {
+        "x": 40,
+        "y": 0.5,
+        "z": 0
+      }
+    },
+    {
+      "id": "station-DEC-001",
+      "sourceObjectId": "DEC-001",
+      "code": "DEC-001",
+      "label": "折扣是否超 10%",
+      "stationKind": "decision",
+      "regionId": "region-未分组",
+      "actorId": null,
+      "order": 11,
+      "position": {
+        "x": 44,
+        "y": 0.5,
+        "z": 12
+      }
+    },
+    {
+      "id": "station-ACT-007",
+      "sourceObjectId": "ACT-007",
+      "code": "ACT-007",
+      "label": "开票",
+      "stationKind": "activity",
+      "regionId": "region-财务部",
+      "actorId": "actor-ROLE-003",
+      "order": 12,
+      "position": {
+        "x": 48,
+        "y": 0.5,
+        "z": 18
+      }
+    },
+    {
+      "id": "station-ACT-008",
+      "sourceObjectId": "ACT-008",
+      "code": "ACT-008",
+      "label": "回款登记",
+      "stationKind": "activity",
+      "regionId": "region-财务部",
+      "actorId": "actor-ROLE-003",
+      "order": 13,
+      "position": {
+        "x": 52,
+        "y": 0.5,
+        "z": 18
+      }
+    },
+    {
+      "id": "station-END-001",
+      "sourceObjectId": "END-001",
+      "code": "END-001",
+      "label": "订单闭环",
+      "stationKind": "end",
+      "regionId": "region-未分组",
+      "actorId": null,
+      "order": 14,
+      "position": {
+        "x": 56,
+        "y": 0.5,
+        "z": 12
+      }
+    }
+  ],
+  "paths": [
+    {
+      "id": "path-rel-025",
+      "sourceRelationId": "rel-025",
+      "fromStationId": "station-ACT-001",
+      "toStationId": "station-ACT-002",
+      "label": null,
+      "condition": null,
+      "points": [
+        {
+          "x": 20,
+          "y": 0.5,
+          "z": 30
+        },
+        {
+          "x": 26,
+          "y": 1.3,
+          "z": 30
+        },
+        {
+          "x": 32,
+          "y": 0.5,
+          "z": 30
+        }
+      ]
+    },
+    {
+      "id": "path-rel-026",
+      "sourceRelationId": "rel-026",
+      "fromStationId": "station-ACT-002",
+      "toStationId": "station-DEC-001",
+      "label": null,
+      "condition": null,
+      "points": [
+        {
+          "x": 32,
+          "y": 0.5,
+          "z": 30
+        },
+        {
+          "x": 38,
+          "y": 1.3,
+          "z": 21
+        },
+        {
+          "x": 44,
+          "y": 0.5,
+          "z": 12
+        }
+      ]
+    },
+    {
+      "id": "path-rel-029",
+      "sourceRelationId": "rel-029",
+      "fromStationId": "station-ACT-003",
+      "toStationId": "station-ACT-004",
+      "label": null,
+      "condition": null,
+      "points": [
+        {
+          "x": 12,
+          "y": 0.5,
+          "z": 30
+        },
+        {
+          "x": 18,
+          "y": 1.3,
+          "z": 24
+        },
+        {
+          "x": 24,
+          "y": 0.5,
+          "z": 18
+        }
+      ]
+    },
+    {
+      "id": "path-rel-030",
+      "sourceRelationId": "rel-030",
+      "fromStationId": "station-ACT-004",
+      "toStationId": "station-DEC-002",
+      "label": null,
+      "condition": null,
+      "points": [
+        {
+          "x": 24,
+          "y": 0.5,
+          "z": 18
+        },
+        {
+          "x": 30,
+          "y": 1.3,
+          "z": 15
+        },
+        {
+          "x": 36,
+          "y": 0.5,
+          "z": 12
+        }
+      ]
+    },
+    {
+      "id": "path-rel-034",
+      "sourceRelationId": "rel-034",
+      "fromStationId": "station-ACT-005",
+      "toStationId": "station-ACT-006",
+      "label": null,
+      "condition": null,
+      "points": [
+        {
+          "x": 28,
+          "y": 0.5,
+          "z": 30
+        },
+        {
+          "x": 34,
+          "y": 1.3,
+          "z": 15
+        },
+        {
+          "x": 40,
+          "y": 0.5,
+          "z": 0
+        }
+      ]
+    },
+    {
+      "id": "path-rel-035",
+      "sourceRelationId": "rel-035",
+      "fromStationId": "station-ACT-006",
+      "toStationId": "station-ACT-007",
+      "label": null,
+      "condition": null,
+      "points": [
+        {
+          "x": 40,
+          "y": 0.5,
+          "z": 0
+        },
+        {
+          "x": 44,
+          "y": 1.3,
+          "z": 9
+        },
+        {
+          "x": 48,
+          "y": 0.5,
+          "z": 18
+        }
+      ]
+    },
+    {
+      "id": "path-rel-036",
+      "sourceRelationId": "rel-036",
+      "fromStationId": "station-ACT-007",
+      "toStationId": "station-ACT-008",
+      "label": null,
+      "condition": null,
+      "points": [
+        {
+          "x": 48,
+          "y": 0.5,
+          "z": 18
+        },
+        {
+          "x": 50,
+          "y": 1.3,
+          "z": 18
+        },
+        {
+          "x": 52,
+          "y": 0.5,
+          "z": 18
+        }
+      ]
+    },
+    {
+      "id": "path-rel-037",
+      "sourceRelationId": "rel-037",
+      "fromStationId": "station-ACT-008",
+      "toStationId": "station-END-001",
+      "label": null,
+      "condition": null,
+      "points": [
+        {
+          "x": 52,
+          "y": 0.5,
+          "z": 18
+        },
+        {
+          "x": 54,
+          "y": 1.3,
+          "z": 15
+        },
+        {
+          "x": 56,
+          "y": 0.5,
+          "z": 12
+        }
+      ]
+    },
+    {
+      "id": "path-rel-033",
+      "sourceRelationId": "rel-033",
+      "fromStationId": "station-ACT-009",
+      "toStationId": "station-ACT-005",
+      "label": null,
+      "condition": null,
+      "points": [
+        {
+          "x": 16,
+          "y": 0.5,
+          "z": 18
+        },
+        {
+          "x": 22,
+          "y": 1.3,
+          "z": 24
+        },
+        {
+          "x": 28,
+          "y": 0.5,
+          "z": 30
+        }
+      ]
+    },
+    {
+      "id": "path-rel-027",
+      "sourceRelationId": "rel-027",
+      "fromStationId": "station-DEC-001",
+      "toStationId": "station-ACT-003",
+      "label": "是（折扣 > 10%）：提交销售经理审批",
+      "condition": "是（折扣 > 10%）：提交销售经理审批",
+      "points": [
+        {
+          "x": 44,
+          "y": 0.5,
+          "z": 12
+        },
+        {
+          "x": 28,
+          "y": 1.3,
+          "z": 21
+        },
+        {
+          "x": 12,
+          "y": 0.5,
+          "z": 30
+        }
+      ]
+    },
+    {
+      "id": "path-rel-028",
+      "sourceRelationId": "rel-028",
+      "fromStationId": "station-DEC-001",
+      "toStationId": "station-ACT-004",
+      "label": "否（折扣 ≤ 10%）：无需审批，进入信用检查",
+      "condition": "否（折扣 ≤ 10%）：无需审批，进入信用检查",
+      "points": [
+        {
+          "x": 44,
+          "y": 0.5,
+          "z": 12
+        },
+        {
+          "x": 34,
+          "y": 1.3,
+          "z": 15
+        },
+        {
+          "x": 24,
+          "y": 0.5,
+          "z": 18
+        }
+      ]
+    },
+    {
+      "id": "path-rel-031",
+      "sourceRelationId": "rel-031",
+      "fromStationId": "station-DEC-002",
+      "toStationId": "station-ACT-005",
+      "label": "否（未逾期）：允许下单",
+      "condition": "否（未逾期）：允许下单",
+      "points": [
+        {
+          "x": 36,
+          "y": 0.5,
+          "z": 12
+        },
+        {
+          "x": 32,
+          "y": 1.3,
+          "z": 21
+        },
+        {
+          "x": 28,
+          "y": 0.5,
+          "z": 30
+        }
+      ]
+    },
+    {
+      "id": "path-rel-032",
+      "sourceRelationId": "rel-032",
+      "fromStationId": "station-DEC-002",
+      "toStationId": "station-ACT-009",
+      "label": "是（已逾期）：转财务特批",
+      "condition": "是（已逾期）：转财务特批",
+      "points": [
+        {
+          "x": 36,
+          "y": 0.5,
+          "z": 12
+        },
+        {
+          "x": 26,
+          "y": 1.3,
+          "z": 15
+        },
+        {
+          "x": 16,
+          "y": 0.5,
+          "z": 18
+        }
+      ]
+    },
+    {
+      "id": "path-rel-038",
+      "sourceRelationId": "rel-038",
+      "fromStationId": "station-EXC-001",
+      "toStationId": "station-ACT-003",
+      "label": null,
+      "condition": null,
+      "points": [
+        {
+          "x": 0,
+          "y": 0.5,
+          "z": 12
+        },
+        {
+          "x": 6,
+          "y": 1.3,
+          "z": 21
+        },
+        {
+          "x": 12,
+          "y": 0.5,
+          "z": 30
+        }
+      ]
+    },
+    {
+      "id": "path-rel-039",
+      "sourceRelationId": "rel-039",
+      "fromStationId": "station-EXC-002",
+      "toStationId": "station-ACT-009",
+      "label": null,
+      "condition": null,
+      "points": [
+        {
+          "x": 4,
+          "y": 0.5,
+          "z": 12
+        },
+        {
+          "x": 10,
+          "y": 1.3,
+          "z": 15
+        },
+        {
+          "x": 16,
+          "y": 0.5,
+          "z": 18
+        }
+      ]
+    },
+    {
+      "id": "path-rel-024",
+      "sourceRelationId": "rel-024",
+      "fromStationId": "station-START-001",
+      "toStationId": "station-ACT-001",
+      "label": null,
+      "condition": null,
+      "points": [
+        {
+          "x": 8,
+          "y": 0.5,
+          "z": 12
+        },
+        {
+          "x": 14,
+          "y": 1.3,
+          "z": 21
+        },
+        {
+          "x": 20,
+          "y": 0.5,
+          "z": 30
+        }
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "id": "issue-PROB-001",
+      "sourceObjectId": "PROB-001",
+      "code": "PROB-001",
+      "label": "报价折扣无审批标准，销售随意打折",
+      "impact": "毛利失控",
+      "relatedRequirementIds": [
+        "REQ-001"
+      ],
+      "position": {
+        "x": 0,
+        "y": 3,
+        "z": 36
+      }
+    },
+    {
+      "id": "issue-PROB-002",
+      "sourceObjectId": "PROB-002",
+      "code": "PROB-002",
+      "label": "客户信用与逾期信息分散，坏账风险高",
+      "impact": "回款逾期、坏账",
+      "relatedRequirementIds": [
+        "REQ-002",
+        "REQ-003"
+      ],
+      "position": {
+        "x": 4,
+        "y": 3,
+        "z": 36
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-DO-001",
+      "sourceObjectId": "DO-001",
+      "code": "DO-001",
+      "label": "报价单",
+      "docType": "quotation",
+      "producedByStationIds": [
+        "station-ACT-002"
+      ],
+      "consumedByStationIds": [
+        "station-ACT-003"
+      ],
+      "position": {
+        "x": 0,
+        "y": 3,
+        "z": 42
+      }
+    },
+    {
+      "id": "artifact-DO-002",
+      "sourceObjectId": "DO-002",
+      "code": "DO-002",
+      "label": "销售订单",
+      "docType": "sale_order",
+      "producedByStationIds": [
+        "station-ACT-005"
+      ],
+      "consumedByStationIds": [],
+      "position": {
+        "x": 4,
+        "y": 3,
+        "z": 42
+      }
+    },
+    {
+      "id": "artifact-DO-003",
+      "sourceObjectId": "DO-003",
+      "code": "DO-003",
+      "label": "发票",
+      "docType": "invoice",
+      "producedByStationIds": [
+        "station-ACT-007"
+      ],
+      "consumedByStationIds": [],
+      "position": {
+        "x": 8,
+        "y": 3,
+        "z": 42
+      }
+    },
+    {
+      "id": "artifact-DO-004",
+      "sourceObjectId": "DO-004",
+      "code": "DO-004",
+      "label": "发货单",
+      "docType": "delivery_order",
+      "producedByStationIds": [
+        "station-ACT-006"
+      ],
+      "consumedByStationIds": [],
+      "position": {
+        "x": 12,
+        "y": 3,
+        "z": 42
+      }
+    },
+    {
+      "id": "artifact-DO-005",
+      "sourceObjectId": "DO-005",
+      "code": "DO-005",
+      "label": "银行回款记录",
+      "docType": "payment_record",
+      "producedByStationIds": [
+        "station-ACT-008"
+      ],
+      "consumedByStationIds": [],
+      "position": {
+        "x": 16,
+        "y": 3,
+        "z": 42
+      }
+    }
+  ],
+  "steps": [
+    {
+      "id": "step-000",
+      "order": 0,
+      "title": "场景总览：PRJ-TRADE-001",
+      "narration": "本场景包含 6 个区域、6 个角色、15 个站点，共 16 条流转路径、2 个问题与 5 个交付物。",
+      "focusKind": "overview",
+      "focusId": "PRJ-TRADE-001",
+      "stationId": null
+    },
+    {
+      "id": "step-001",
+      "order": 1,
+      "title": "EXC-001 审批超时",
+      "narration": "站点「审批超时」由未指定角色负责。",
+      "focusKind": "station",
+      "focusId": "station-EXC-001",
+      "stationId": "station-EXC-001"
+    },
+    {
+      "id": "step-002",
+      "order": 2,
+      "title": "EXC-002 信用不足",
+      "narration": "站点「信用不足」由未指定角色负责。",
+      "focusKind": "station",
+      "focusId": "station-EXC-002",
+      "stationId": "station-EXC-002"
+    },
+    {
+      "id": "step-003",
+      "order": 3,
+      "title": "START-001 询价受理",
+      "narration": "站点「询价受理」由未指定角色负责。",
+      "focusKind": "station",
+      "focusId": "station-START-001",
+      "stationId": "station-START-001"
+    },
+    {
+      "id": "step-004",
+      "order": 4,
+      "title": "ACT-003 折扣审批",
+      "narration": "站点「折扣审批」由销售经理负责。",
+      "focusKind": "station",
+      "focusId": "station-ACT-003",
+      "stationId": "station-ACT-003"
+    },
+    {
+      "id": "step-005",
+      "order": 5,
+      "title": "ACT-009 信用/逾期特批",
+      "narration": "站点「信用/逾期特批」由财务负责。",
+      "focusKind": "station",
+      "focusId": "station-ACT-009",
+      "stationId": "station-ACT-009"
+    },
+    {
+      "id": "step-006",
+      "order": 6,
+      "title": "ACT-001 登记线索/询价",
+      "narration": "站点「登记线索/询价」由销售经理负责。",
+      "focusKind": "station",
+      "focusId": "station-ACT-001",
+      "stationId": "station-ACT-001"
+    },
+    {
+      "id": "step-007",
+      "order": 7,
+      "title": "ACT-004 信用检查",
+      "narration": "站点「信用检查」由财务负责。",
+      "focusKind": "station",
+      "focusId": "station-ACT-004",
+      "stationId": "station-ACT-004"
+    },
+    {
+      "id": "step-008",
+      "order": 8,
+      "title": "ACT-005 创建销售订单",
+      "narration": "站点「创建销售订单」由销售经理负责，产出 销售订单。",
+      "focusKind": "station",
+      "focusId": "station-ACT-005",
+      "stationId": "station-ACT-005"
+    },
+    {
+      "id": "step-009",
+      "order": 9,
+      "title": "ACT-002 编制报价",
+      "narration": "站点「编制报价」由销售经理负责，产出 报价单。",
+      "focusKind": "station",
+      "focusId": "station-ACT-002",
+      "stationId": "station-ACT-002"
+    },
+    {
+      "id": "step-010",
+      "order": 10,
+      "title": "DEC-002 客户是否逾期",
+      "narration": "站点「客户是否逾期」由未指定角色负责。",
+      "focusKind": "station",
+      "focusId": "station-DEC-002",
+      "stationId": "station-DEC-002"
+    },
+    {
+      "id": "step-011",
+      "order": 11,
+      "title": "ACT-006 仓库发货",
+      "narration": "站点「仓库发货」由仓库负责，产出 发货单。",
+      "focusKind": "station",
+      "focusId": "station-ACT-006",
+      "stationId": "station-ACT-006"
+    },
+    {
+      "id": "step-012",
+      "order": 12,
+      "title": "DEC-001 折扣是否超 10%",
+      "narration": "站点「折扣是否超 10%」由未指定角色负责。",
+      "focusKind": "station",
+      "focusId": "station-DEC-001",
+      "stationId": "station-DEC-001"
+    },
+    {
+      "id": "step-013",
+      "order": 13,
+      "title": "ACT-007 开票",
+      "narration": "站点「开票」由财务负责，产出 发票。",
+      "focusKind": "station",
+      "focusId": "station-ACT-007",
+      "stationId": "station-ACT-007"
+    },
+    {
+      "id": "step-014",
+      "order": 14,
+      "title": "ACT-008 回款登记",
+      "narration": "站点「回款登记」由财务负责，产出 银行回款记录。",
+      "focusKind": "station",
+      "focusId": "station-ACT-008",
+      "stationId": "station-ACT-008"
+    },
+    {
+      "id": "step-015",
+      "order": 15,
+      "title": "END-001 订单闭环",
+      "narration": "站点「订单闭环」由未指定角色负责。",
+      "focusKind": "station",
+      "focusId": "station-END-001",
+      "stationId": "station-END-001"
+    },
+    {
+      "id": "step-016",
+      "order": 16,
+      "title": "问题 PROB-001",
+      "narration": "问题「报价折扣无审批标准，销售随意打折」，影响：毛利失控。相关需求：REQ-001。",
+      "focusKind": "issue",
+      "focusId": "issue-PROB-001",
+      "stationId": null
+    },
+    {
+      "id": "step-017",
+      "order": 17,
+      "title": "问题 PROB-002",
+      "narration": "问题「客户信用与逾期信息分散，坏账风险高」，影响：回款逾期、坏账。相关需求：REQ-002、REQ-003。",
+      "focusKind": "issue",
+      "focusId": "issue-PROB-002",
+      "stationId": null
+    }
+  ],
+  "cards": [
+    {
+      "id": "actor-ROLE-001",
+      "objectId": "ROLE-001",
+      "kind": "actor",
+      "code": "ROLE-001",
+      "title": "销售员",
+      "summary": "角色「销售员」属于销售部，共负责 0 个流程站点。"
+    },
+    {
+      "id": "actor-ROLE-002",
+      "objectId": "ROLE-002",
+      "kind": "actor",
+      "code": "ROLE-002",
+      "title": "销售经理",
+      "summary": "角色「销售经理」属于销售部，共负责 4 个流程站点。"
+    },
+    {
+      "id": "actor-ROLE-003",
+      "objectId": "ROLE-003",
+      "kind": "actor",
+      "code": "ROLE-003",
+      "title": "财务",
+      "summary": "角色「财务」属于财务部，共负责 4 个流程站点。"
+    },
+    {
+      "id": "actor-ROLE-004",
+      "objectId": "ROLE-004",
+      "kind": "actor",
+      "code": "ROLE-004",
+      "title": "仓库",
+      "summary": "角色「仓库」属于仓储部，共负责 1 个流程站点。"
+    },
+    {
+      "id": "actor-ROLE-005",
+      "objectId": "ROLE-005",
+      "kind": "actor",
+      "code": "ROLE-005",
+      "title": "采购",
+      "summary": "角色「采购」属于采购部，共负责 0 个流程站点。"
+    },
+    {
+      "id": "actor-ROLE-006",
+      "objectId": "ROLE-006",
+      "kind": "actor",
+      "code": "ROLE-006",
+      "title": "客户",
+      "summary": "角色「客户」属于外部，共负责 0 个流程站点。"
+    },
+    {
+      "id": "artifact-DO-001",
+      "objectId": "DO-001",
+      "kind": "artifact",
+      "code": "DO-001",
+      "title": "报价单",
+      "summary": "交付物「报价单」（quotation）。产出节点：ACT-002 编制报价。"
+    },
+    {
+      "id": "artifact-DO-002",
+      "objectId": "DO-002",
+      "kind": "artifact",
+      "code": "DO-002",
+      "title": "销售订单",
+      "summary": "交付物「销售订单」（sale_order）。产出节点：ACT-005 创建销售订单。"
+    },
+    {
+      "id": "artifact-DO-003",
+      "objectId": "DO-003",
+      "kind": "artifact",
+      "code": "DO-003",
+      "title": "发票",
+      "summary": "交付物「发票」（invoice）。产出节点：ACT-007 开票。"
+    },
+    {
+      "id": "artifact-DO-004",
+      "objectId": "DO-004",
+      "kind": "artifact",
+      "code": "DO-004",
+      "title": "发货单",
+      "summary": "交付物「发货单」（delivery_order）。产出节点：ACT-006 仓库发货。"
+    },
+    {
+      "id": "artifact-DO-005",
+      "objectId": "DO-005",
+      "kind": "artifact",
+      "code": "DO-005",
+      "title": "银行回款记录",
+      "summary": "交付物「银行回款记录」（payment_record）。产出节点：ACT-008 回款登记。"
+    },
+    {
+      "id": "issue-PROB-001",
+      "objectId": "PROB-001",
+      "kind": "issue",
+      "code": "PROB-001",
+      "title": "报价折扣无审批标准，销售随意打折",
+      "summary": "问题「报价折扣无审批标准，销售随意打折」。影响：毛利失控。相关需求：REQ-001。"
+    },
+    {
+      "id": "issue-PROB-002",
+      "objectId": "PROB-002",
+      "kind": "issue",
+      "code": "PROB-002",
+      "title": "客户信用与逾期信息分散，坏账风险高",
+      "summary": "问题「客户信用与逾期信息分散，坏账风险高」。影响：回款逾期、坏账。相关需求：REQ-002、REQ-003。"
+    },
+    {
+      "id": "station-ACT-001",
+      "objectId": "ACT-001",
+      "kind": "activity",
+      "code": "ACT-001",
+      "title": "登记线索/询价",
+      "summary": "流程节点「ACT-001 登记线索/询价」主责角色：销售经理。暂无相关交付物。"
+    },
+    {
+      "id": "station-ACT-002",
+      "objectId": "ACT-002",
+      "kind": "activity",
+      "code": "ACT-002",
+      "title": "编制报价",
+      "summary": "流程节点「ACT-002 编制报价」主责角色：销售经理。相关交付物：报价单。"
+    },
+    {
+      "id": "station-ACT-003",
+      "objectId": "ACT-003",
+      "kind": "activity",
+      "code": "ACT-003",
+      "title": "折扣审批",
+      "summary": "流程节点「ACT-003 折扣审批」主责角色：销售经理。相关交付物：报价单。"
+    },
+    {
+      "id": "station-ACT-004",
+      "objectId": "ACT-004",
+      "kind": "activity",
+      "code": "ACT-004",
+      "title": "信用检查",
+      "summary": "流程节点「ACT-004 信用检查」主责角色：财务。暂无相关交付物。"
+    },
+    {
+      "id": "station-ACT-005",
+      "objectId": "ACT-005",
+      "kind": "activity",
+      "code": "ACT-005",
+      "title": "创建销售订单",
+      "summary": "流程节点「ACT-005 创建销售订单」主责角色：销售经理。相关交付物：销售订单。"
+    },
+    {
+      "id": "station-ACT-006",
+      "objectId": "ACT-006",
+      "kind": "activity",
+      "code": "ACT-006",
+      "title": "仓库发货",
+      "summary": "流程节点「ACT-006 仓库发货」主责角色：仓库。相关交付物：发货单。"
+    },
+    {
+      "id": "station-ACT-007",
+      "objectId": "ACT-007",
+      "kind": "activity",
+      "code": "ACT-007",
+      "title": "开票",
+      "summary": "流程节点「ACT-007 开票」主责角色：财务。相关交付物：发票。"
+    },
+    {
+      "id": "station-ACT-008",
+      "objectId": "ACT-008",
+      "kind": "activity",
+      "code": "ACT-008",
+      "title": "回款登记",
+      "summary": "流程节点「ACT-008 回款登记」主责角色：财务。相关交付物：银行回款记录。"
+    },
+    {
+      "id": "station-ACT-009",
+      "objectId": "ACT-009",
+      "kind": "activity",
+      "code": "ACT-009",
+      "title": "信用/逾期特批",
+      "summary": "流程节点「ACT-009 信用/逾期特批」主责角色：财务。暂无相关交付物。"
+    },
+    {
+      "id": "station-DEC-001",
+      "objectId": "DEC-001",
+      "kind": "decision",
+      "code": "DEC-001",
+      "title": "折扣是否超 10%",
+      "summary": "流程节点「DEC-001 折扣是否超 10%」主责角色：未指定角色。暂无相关交付物。"
+    },
+    {
+      "id": "station-DEC-002",
+      "objectId": "DEC-002",
+      "kind": "decision",
+      "code": "DEC-002",
+      "title": "客户是否逾期",
+      "summary": "流程节点「DEC-002 客户是否逾期」主责角色：未指定角色。暂无相关交付物。"
+    },
+    {
+      "id": "station-END-001",
+      "objectId": "END-001",
+      "kind": "end",
+      "code": "END-001",
+      "title": "订单闭环",
+      "summary": "流程节点「END-001 订单闭环」主责角色：未指定角色。暂无相关交付物。"
+    },
+    {
+      "id": "station-EXC-001",
+      "objectId": "EXC-001",
+      "kind": "exception",
+      "code": "EXC-001",
+      "title": "审批超时",
+      "summary": "流程节点「EXC-001 审批超时」主责角色：未指定角色。暂无相关交付物。"
+    },
+    {
+      "id": "station-EXC-002",
+      "objectId": "EXC-002",
+      "kind": "exception",
+      "code": "EXC-002",
+      "title": "信用不足",
+      "summary": "流程节点「EXC-002 信用不足」主责角色：未指定角色。暂无相关交付物。"
+    },
+    {
+      "id": "station-START-001",
+      "objectId": "START-001",
+      "kind": "start",
+      "code": "START-001",
+      "title": "询价受理",
+      "summary": "流程节点「START-001 询价受理」主责角色：未指定角色。暂无相关交付物。"
+    }
+  ]
+}

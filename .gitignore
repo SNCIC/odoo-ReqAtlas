@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Tooling caches
+.vite/
+.eslintcache
+
+# Agent runtime state: team transcripts / session state are local only.
+# NOTE: .codebuddy/agents/** and .codebuddy/audit/** ARE versioned (they are
+# project tooling: subagent definitions and the independent audit scripts).
+.codebuddy/teams/

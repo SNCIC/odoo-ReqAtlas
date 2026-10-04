@@ -1,0 +1,13 @@
+{
+  "type": "https://errors.local/revision-conflict",
+  "title": "项目版本冲突",
+  "status": 409,
+  "code": "REVISION_CONFLICT",
+  "detail": "提交基于修订 41，当前为 42。请刷新差异后人工合并。",
+  "requestId": "req_9f2a1c7b",
+  "context": {
+    "expected": 41,
+    "actual": 42,
+    "projectId": "prj_123"
+  }
+}

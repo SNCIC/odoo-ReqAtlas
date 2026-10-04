@@ -1,0 +1,1197 @@
+{
+  "projectId": "PRJ-TRADE-001",
+  "projectRevision": 1,
+  "modelObject": [
+    {
+      "id": "ROLE-001",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "role",
+      "code": "ROLE-001",
+      "title": "销售员",
+      "state": "confirmed",
+      "sourceStatus": "confirmed_fact",
+      "objectRev": 1,
+      "payload": {
+        "department": "销售部",
+        "templateOrigin": {
+          "packageId": "trade.generic",
+          "itemKey": "trade.generic#role.sales"
+        },
+        "templateCandidate": false
+      }
+    },
+    {
+      "id": "ROLE-002",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "role",
+      "code": "ROLE-002",
+      "title": "销售经理",
+      "state": "confirmed",
+      "sourceStatus": "user_statement",
+      "objectRev": 1,
+      "payload": {
+        "department": "销售部",
+        "templateOrigin": {
+          "packageId": "trade.generic",
+          "itemKey": "trade.generic#role.approver"
+        },
+        "templateCandidate": false
+      }
+    },
+    {
+      "id": "ROLE-003",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "role",
+      "code": "ROLE-003",
+      "title": "财务",
+      "state": "confirmed",
+      "sourceStatus": "material_extracted",
+      "objectRev": 1,
+      "payload": {
+        "department": "财务部",
+        "templateOrigin": {
+          "packageId": "trade.generic",
+          "itemKey": "trade.generic#role.finance"
+        },
+        "templateCandidate": false
+      }
+    },
+    {
+      "id": "ROLE-004",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "role",
+      "code": "ROLE-004",
+      "title": "仓库",
+      "state": "confirmed",
+      "sourceStatus": "user_statement",
+      "objectRev": 1,
+      "payload": {
+        "department": "仓储部",
+        "templateOrigin": {
+          "packageId": "trade.generic",
+          "itemKey": "trade.generic#role.warehouse"
+        },
+        "templateCandidate": false
+      }
+    },
+    {
+      "id": "ROLE-005",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "role",
+      "code": "ROLE-005",
+      "title": "采购",
+      "state": "confirmed",
+      "sourceStatus": "user_statement",
+      "objectRev": 1,
+      "payload": {
+        "department": "采购部",
+        "templateOrigin": {
+          "packageId": "trade.generic",
+          "itemKey": "trade.generic#role.purchase"
+        },
+        "templateCandidate": false
+      }
+    },
+    {
+      "id": "ROLE-006",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "role",
+      "code": "ROLE-006",
+      "title": "客户",
+      "state": "confirmed",
+      "sourceStatus": "user_statement",
+      "objectRev": 1,
+      "payload": {
+        "department": "外部"
+      }
+    },
+    {
+      "id": "START-001",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "start",
+      "code": "START-001",
+      "title": "询价受理",
+      "state": "draft",
+      "sourceStatus": "user_statement",
+      "objectRev": 1,
+      "payload": {
+        "trigger": "客户发起询价"
+      }
+    },
+    {
+      "id": "ACT-001",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "activity",
+      "code": "ACT-001",
+      "title": "登记线索/询价",
+      "state": "confirmed",
+      "sourceStatus": "user_statement",
+      "objectRev": 1,
+      "payload": {
+        "phase": "售前",
+        "templateOrigin": {
+          "packageId": "trade.generic",
+          "itemKey": "trade.generic#flow.q2c.01"
+        },
+        "templateCandidate": false
+      }
+    },
+    {
+      "id": "ACT-002",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "activity",
+      "code": "ACT-002",
+      "title": "编制报价",
+      "state": "confirmed",
+      "sourceStatus": "material_extracted",
+      "objectRev": 1,
+      "payload": {
+        "phase": "售前",
+        "templateOrigin": {
+          "packageId": "trade.generic",
+          "itemKey": "trade.generic#flow.q2c.02"
+        },
+        "templateCandidate": false
+      }
+    },
+    {
+      "id": "DEC-001",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "decision",
+      "code": "DEC-001",
+      "title": "折扣是否超 10%",
+      "state": "confirmed",
+      "sourceStatus": "consultant_judgment",
+      "objectRev": 1,
+      "payload": {
+        "phase": "售前"
+      }
+    },
+    {
+      "id": "ACT-003",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "activity",
+      "code": "ACT-003",
+      "title": "折扣审批",
+      "state": "confirmed",
+      "sourceStatus": "confirmed_fact",
+      "objectRev": 1,
+      "payload": {
+        "phase": "售前"
+      }
+    },
+    {
+      "id": "ACT-004",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "activity",
+      "code": "ACT-004",
+      "title": "信用检查",
+      "state": "confirmed",
+      "sourceStatus": "confirmed_fact",
+      "objectRev": 1,
+      "payload": {
+        "phase": "售前",
+        "templateOrigin": {
+          "packageId": "trade.generic",
+          "itemKey": "trade.generic#flow.q2c.04"
+        },
+        "templateCandidate": false
+      }
+    },
+    {
+      "id": "DEC-002",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "decision",
+      "code": "DEC-002",
+      "title": "客户是否逾期",
+      "state": "draft",
+      "sourceStatus": "agent_inference",
+      "objectRev": 1,
+      "payload": {
+        "phase": "售前"
+      }
+    },
+    {
+      "id": "ACT-009",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "activity",
+      "code": "ACT-009",
+      "title": "信用/逾期特批",
+      "state": "draft",
+      "sourceStatus": "consultant_judgment",
+      "objectRev": 1,
+      "payload": {
+        "phase": "售前"
+      }
+    },
+    {
+      "id": "ACT-005",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "activity",
+      "code": "ACT-005",
+      "title": "创建销售订单",
+      "state": "confirmed",
+      "sourceStatus": "confirmed_fact",
+      "objectRev": 1,
+      "payload": {
+        "phase": "售中",
+        "templateOrigin": {
+          "packageId": "trade.generic",
+          "itemKey": "trade.generic#flow.q2c.03"
+        },
+        "templateCandidate": false
+      }
+    },
+    {
+      "id": "ACT-006",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "activity",
+      "code": "ACT-006",
+      "title": "仓库发货",
+      "state": "confirmed",
+      "sourceStatus": "confirmed_fact",
+      "objectRev": 1,
+      "payload": {
+        "phase": "售中",
+        "templateOrigin": {
+          "packageId": "trade.generic",
+          "itemKey": "trade.generic#flow.q2c.05"
+        },
+        "templateCandidate": false
+      }
+    },
+    {
+      "id": "ACT-007",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "activity",
+      "code": "ACT-007",
+      "title": "开票",
+      "state": "confirmed",
+      "sourceStatus": "confirmed_fact",
+      "objectRev": 1,
+      "payload": {
+        "phase": "售后",
+        "templateOrigin": {
+          "packageId": "trade.generic",
+          "itemKey": "trade.generic#flow.q2c.06"
+        },
+        "templateCandidate": false
+      }
+    },
+    {
+      "id": "ACT-008",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "activity",
+      "code": "ACT-008",
+      "title": "回款登记",
+      "state": "confirmed",
+      "sourceStatus": "confirmed_fact",
+      "objectRev": 1,
+      "payload": {
+        "phase": "售后",
+        "templateOrigin": {
+          "packageId": "trade.generic",
+          "itemKey": "trade.generic#flow.q2c.07"
+        },
+        "templateCandidate": false
+      }
+    },
+    {
+      "id": "END-001",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "end",
+      "code": "END-001",
+      "title": "订单闭环",
+      "state": "confirmed",
+      "sourceStatus": "confirmed_fact",
+      "objectRev": 1,
+      "payload": {
+        "outcome": "回款完成"
+      }
+    },
+    {
+      "id": "EXC-001",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "exception",
+      "code": "EXC-001",
+      "title": "审批超时",
+      "state": "pending_confirmation",
+      "sourceStatus": "consultant_judgment",
+      "objectRev": 1,
+      "payload": {
+        "sla": "24h"
+      }
+    },
+    {
+      "id": "EXC-002",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "exception",
+      "code": "EXC-002",
+      "title": "信用不足",
+      "state": "pending_confirmation",
+      "sourceStatus": "agent_inference",
+      "objectRev": 1,
+      "payload": {
+        "reason": "额度不足或存在逾期",
+        "templateOrigin": {
+          "packageId": "trade.generic",
+          "itemKey": "trade.generic#sample.credit_block"
+        },
+        "templateCandidate": true
+      }
+    },
+    {
+      "id": "DO-001",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "data_object",
+      "code": "DO-001",
+      "title": "报价单",
+      "state": "confirmed",
+      "sourceStatus": "material_extracted",
+      "objectRev": 1,
+      "payload": {
+        "docType": "quotation",
+        "templateOrigin": {
+          "packageId": "trade.generic",
+          "itemKey": "trade.generic#doc.quotation"
+        },
+        "templateCandidate": false
+      }
+    },
+    {
+      "id": "DO-002",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "data_object",
+      "code": "DO-002",
+      "title": "销售订单",
+      "state": "confirmed",
+      "sourceStatus": "material_extracted",
+      "objectRev": 1,
+      "payload": {
+        "docType": "sale_order",
+        "templateOrigin": {
+          "packageId": "trade.generic",
+          "itemKey": "trade.generic#doc.so"
+        },
+        "templateCandidate": false
+      }
+    },
+    {
+      "id": "DO-003",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "data_object",
+      "code": "DO-003",
+      "title": "发票",
+      "state": "confirmed",
+      "sourceStatus": "material_extracted",
+      "objectRev": 1,
+      "payload": {
+        "docType": "invoice",
+        "templateOrigin": {
+          "packageId": "trade.generic",
+          "itemKey": "trade.generic#doc.ar_invoice"
+        },
+        "templateCandidate": false
+      }
+    },
+    {
+      "id": "DO-004",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "data_object",
+      "code": "DO-004",
+      "title": "发货单",
+      "state": "confirmed",
+      "sourceStatus": "material_extracted",
+      "objectRev": 1,
+      "payload": {
+        "docType": "delivery_order",
+        "templateOrigin": {
+          "packageId": "trade.generic",
+          "itemKey": "trade.generic#doc.delivery"
+        },
+        "templateCandidate": false
+      }
+    },
+    {
+      "id": "DO-005",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "data_object",
+      "code": "DO-005",
+      "title": "银行回款记录",
+      "state": "draft",
+      "sourceStatus": "agent_inference",
+      "objectRev": 1,
+      "payload": {
+        "docType": "payment_record",
+        "templateOrigin": {
+          "packageId": "trade.generic",
+          "itemKey": "trade.generic#doc.receipt"
+        },
+        "templateCandidate": true
+      }
+    },
+    {
+      "id": "SYS-001",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "system",
+      "code": "SYS-001",
+      "title": "Odoo",
+      "state": "confirmed",
+      "sourceStatus": "confirmed_fact",
+      "objectRev": 1,
+      "payload": {
+        "vendor": "Odoo S.A."
+      }
+    },
+    {
+      "id": "SYS-002",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "system",
+      "code": "SYS-002",
+      "title": "微信/在线表格",
+      "state": "confirmed",
+      "sourceStatus": "user_statement",
+      "objectRev": 1,
+      "payload": {
+        "vendor": "腾讯/自建"
+      }
+    },
+    {
+      "id": "PROB-001",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "problem",
+      "code": "PROB-001",
+      "title": "报价折扣无审批标准，销售随意打折",
+      "state": "confirmed",
+      "sourceStatus": "user_statement",
+      "objectRev": 1,
+      "payload": {
+        "impact": "毛利失控"
+      }
+    },
+    {
+      "id": "PROB-002",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "problem",
+      "code": "PROB-002",
+      "title": "客户信用与逾期信息分散，坏账风险高",
+      "state": "confirmed",
+      "sourceStatus": "consultant_judgment",
+      "objectRev": 1,
+      "payload": {
+        "impact": "回款逾期、坏账"
+      }
+    },
+    {
+      "id": "REQ-001",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "requirement",
+      "code": "REQ-001",
+      "title": "折扣超过 10% 必须由销售经理审批",
+      "state": "pending_confirmation",
+      "sourceStatus": "consultant_judgment",
+      "objectRev": 1,
+      "payload": {
+        "priority": "must"
+      }
+    },
+    {
+      "id": "REQ-002",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "requirement",
+      "code": "REQ-002",
+      "title": "下单前自动校验客户信用与逾期状态",
+      "state": "draft",
+      "sourceStatus": "agent_inference",
+      "objectRev": 1,
+      "payload": {
+        "priority": "must"
+      }
+    },
+    {
+      "id": "REQ-003",
+      "projectId": "PRJ-TRADE-001",
+      "kind": "requirement",
+      "code": "REQ-003",
+      "title": "回款超期自动提醒并升级",
+      "state": "draft",
+      "sourceStatus": "agent_inference",
+      "objectRev": 1,
+      "payload": {
+        "priority": "should"
+      }
+    }
+  ],
+  "modelRelation": [
+    {
+      "id": "rel-001",
+      "kind": "performs_R",
+      "fromId": "ROLE-001",
+      "toId": "ACT-001"
+    },
+    {
+      "id": "rel-002",
+      "kind": "accountable_A",
+      "fromId": "ROLE-002",
+      "toId": "ACT-001"
+    },
+    {
+      "id": "rel-003",
+      "kind": "performs_R",
+      "fromId": "ROLE-001",
+      "toId": "ACT-002"
+    },
+    {
+      "id": "rel-004",
+      "kind": "accountable_A",
+      "fromId": "ROLE-002",
+      "toId": "ACT-002"
+    },
+    {
+      "id": "rel-005",
+      "kind": "performs_R",
+      "fromId": "ROLE-002",
+      "toId": "ACT-003"
+    },
+    {
+      "id": "rel-006",
+      "kind": "accountable_A",
+      "fromId": "ROLE-002",
+      "toId": "ACT-003"
+    },
+    {
+      "id": "rel-007",
+      "kind": "performs_R",
+      "fromId": "ROLE-003",
+      "toId": "ACT-004"
+    },
+    {
+      "id": "rel-008",
+      "kind": "accountable_A",
+      "fromId": "ROLE-003",
+      "toId": "ACT-004"
+    },
+    {
+      "id": "rel-009",
+      "kind": "performs_R",
+      "fromId": "ROLE-001",
+      "toId": "ACT-005"
+    },
+    {
+      "id": "rel-010",
+      "kind": "accountable_A",
+      "fromId": "ROLE-002",
+      "toId": "ACT-005"
+    },
+    {
+      "id": "rel-011",
+      "kind": "performs_R",
+      "fromId": "ROLE-004",
+      "toId": "ACT-006"
+    },
+    {
+      "id": "rel-012",
+      "kind": "accountable_A",
+      "fromId": "ROLE-004",
+      "toId": "ACT-006"
+    },
+    {
+      "id": "rel-013",
+      "kind": "performs_R",
+      "fromId": "ROLE-003",
+      "toId": "ACT-007"
+    },
+    {
+      "id": "rel-014",
+      "kind": "accountable_A",
+      "fromId": "ROLE-003",
+      "toId": "ACT-007"
+    },
+    {
+      "id": "rel-015",
+      "kind": "performs_R",
+      "fromId": "ROLE-003",
+      "toId": "ACT-008"
+    },
+    {
+      "id": "rel-016",
+      "kind": "accountable_A",
+      "fromId": "ROLE-003",
+      "toId": "ACT-008"
+    },
+    {
+      "id": "rel-017",
+      "kind": "performs_R",
+      "fromId": "ROLE-003",
+      "toId": "ACT-009"
+    },
+    {
+      "id": "rel-018",
+      "kind": "accountable_A",
+      "fromId": "ROLE-003",
+      "toId": "ACT-009"
+    },
+    {
+      "id": "rel-019",
+      "kind": "consulted_C",
+      "fromId": "ROLE-003",
+      "toId": "ACT-002"
+    },
+    {
+      "id": "rel-020",
+      "kind": "consulted_C",
+      "fromId": "ROLE-003",
+      "toId": "ACT-003"
+    },
+    {
+      "id": "rel-021",
+      "kind": "consulted_C",
+      "fromId": "ROLE-005",
+      "toId": "ACT-006"
+    },
+    {
+      "id": "rel-022",
+      "kind": "informed_I",
+      "fromId": "ROLE-004",
+      "toId": "ACT-005"
+    },
+    {
+      "id": "rel-023",
+      "kind": "informed_I",
+      "fromId": "ROLE-006",
+      "toId": "ACT-007"
+    },
+    {
+      "id": "rel-024",
+      "kind": "flow_to",
+      "fromId": "START-001",
+      "toId": "ACT-001"
+    },
+    {
+      "id": "rel-025",
+      "kind": "flow_to",
+      "fromId": "ACT-001",
+      "toId": "ACT-002"
+    },
+    {
+      "id": "rel-026",
+      "kind": "flow_to",
+      "fromId": "ACT-002",
+      "toId": "DEC-001"
+    },
+    {
+      "id": "rel-027",
+      "kind": "flow_to",
+      "fromId": "DEC-001",
+      "toId": "ACT-003",
+      "label": "是（折扣 > 10%）：提交销售经理审批"
+    },
+    {
+      "id": "rel-028",
+      "kind": "flow_to",
+      "fromId": "DEC-001",
+      "toId": "ACT-004",
+      "label": "否（折扣 ≤ 10%）：无需审批，进入信用检查"
+    },
+    {
+      "id": "rel-029",
+      "kind": "flow_to",
+      "fromId": "ACT-003",
+      "toId": "ACT-004",
+      "payload": {
+        "objectId": "DO-001"
+      }
+    },
+    {
+      "id": "rel-030",
+      "kind": "flow_to",
+      "fromId": "ACT-004",
+      "toId": "DEC-002"
+    },
+    {
+      "id": "rel-031",
+      "kind": "flow_to",
+      "fromId": "DEC-002",
+      "toId": "ACT-005",
+      "label": "否（未逾期）：允许下单"
+    },
+    {
+      "id": "rel-032",
+      "kind": "flow_to",
+      "fromId": "DEC-002",
+      "toId": "ACT-009",
+      "label": "是（已逾期）：转财务特批"
+    },
+    {
+      "id": "rel-033",
+      "kind": "flow_to",
+      "fromId": "ACT-009",
+      "toId": "ACT-005",
+      "payload": {
+        "objectId": "DO-002"
+      }
+    },
+    {
+      "id": "rel-034",
+      "kind": "flow_to",
+      "fromId": "ACT-005",
+      "toId": "ACT-006",
+      "payload": {
+        "objectId": "DO-002"
+      }
+    },
+    {
+      "id": "rel-035",
+      "kind": "flow_to",
+      "fromId": "ACT-006",
+      "toId": "ACT-007",
+      "payload": {
+        "objectId": "DO-004"
+      }
+    },
+    {
+      "id": "rel-036",
+      "kind": "flow_to",
+      "fromId": "ACT-007",
+      "toId": "ACT-008"
+    },
+    {
+      "id": "rel-037",
+      "kind": "flow_to",
+      "fromId": "ACT-008",
+      "toId": "END-001"
+    },
+    {
+      "id": "rel-038",
+      "kind": "flow_to",
+      "fromId": "EXC-001",
+      "toId": "ACT-003"
+    },
+    {
+      "id": "rel-039",
+      "kind": "flow_to",
+      "fromId": "EXC-002",
+      "toId": "ACT-009"
+    },
+    {
+      "id": "rel-040",
+      "kind": "has_exception",
+      "fromId": "ACT-003",
+      "toId": "EXC-001"
+    },
+    {
+      "id": "rel-041",
+      "kind": "has_exception",
+      "fromId": "ACT-004",
+      "toId": "EXC-002"
+    },
+    {
+      "id": "rel-042",
+      "kind": "produces",
+      "fromId": "ACT-002",
+      "toId": "DO-001"
+    },
+    {
+      "id": "rel-043",
+      "kind": "consumes",
+      "fromId": "ACT-003",
+      "toId": "DO-001"
+    },
+    {
+      "id": "rel-044",
+      "kind": "produces",
+      "fromId": "ACT-005",
+      "toId": "DO-002"
+    },
+    {
+      "id": "rel-045",
+      "kind": "produces",
+      "fromId": "ACT-006",
+      "toId": "DO-004"
+    },
+    {
+      "id": "rel-046",
+      "kind": "produces",
+      "fromId": "ACT-007",
+      "toId": "DO-003"
+    },
+    {
+      "id": "rel-047",
+      "kind": "produces",
+      "fromId": "ACT-008",
+      "toId": "DO-005"
+    },
+    {
+      "id": "rel-048",
+      "kind": "uses_system",
+      "fromId": "ACT-001",
+      "toId": "SYS-002"
+    },
+    {
+      "id": "rel-049",
+      "kind": "uses_system",
+      "fromId": "ACT-002",
+      "toId": "SYS-001"
+    },
+    {
+      "id": "rel-050",
+      "kind": "uses_system",
+      "fromId": "ACT-004",
+      "toId": "SYS-001"
+    },
+    {
+      "id": "rel-051",
+      "kind": "uses_system",
+      "fromId": "ACT-007",
+      "toId": "SYS-001"
+    },
+    {
+      "id": "rel-058",
+      "kind": "derived_from",
+      "fromId": "REQ-001",
+      "toId": "PROB-001"
+    },
+    {
+      "id": "rel-059",
+      "kind": "derived_from",
+      "fromId": "REQ-002",
+      "toId": "PROB-002"
+    },
+    {
+      "id": "rel-060",
+      "kind": "derived_from",
+      "fromId": "REQ-003",
+      "toId": "PROB-002"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "EV-001",
+      "type": "interview_segment",
+      "locator": "销售员访谈录音 00:12:30-00:13:10",
+      "provider": "销售员",
+      "capturedAt": "2026-03-12",
+      "classification": "internal"
+    },
+    {
+      "id": "EV-002",
+      "type": "form_sample",
+      "locator": "现用报价单模板.xlsx / Sheet1",
+      "provider": "销售员",
+      "capturedAt": "2026-03-15",
+      "classification": "internal"
+    },
+    {
+      "id": "EV-003",
+      "type": "interview_segment",
+      "locator": "财务访谈录音 00:05:10-00:06:20",
+      "provider": "财务",
+      "capturedAt": "2026-03-18",
+      "classification": "sensitive"
+    }
+  ],
+  "evidenceLink": [
+    {
+      "id": "EL-001",
+      "evidenceId": "EV-001",
+      "objectId": "ACT-001",
+      "excerpt": "客户询价多在微信群里，我手工记到表里",
+      "purpose": "支撑询价登记步骤建模"
+    },
+    {
+      "id": "EL-002",
+      "evidenceId": "EV-002",
+      "objectId": "ACT-002",
+      "excerpt": "报价单是我自己维护的 Excel 模板",
+      "purpose": "支撑报价编制步骤建模"
+    },
+    {
+      "id": "EL-003",
+      "evidenceId": "EV-001",
+      "objectId": "DEC-001",
+      "excerpt": "客户压价时我一般直接给折扣",
+      "purpose": "支撑折扣判断分支建模"
+    },
+    {
+      "id": "EL-004",
+      "evidenceId": "EV-001",
+      "objectId": "ACT-003",
+      "excerpt": "超过一定折扣就得找经理签字",
+      "purpose": "支撑折扣审批步骤建模"
+    },
+    {
+      "id": "EL-005",
+      "evidenceId": "EV-003",
+      "objectId": "ACT-004",
+      "excerpt": "下单前我们会看下这个客户的欠款",
+      "purpose": "支撑信用检查步骤建模"
+    },
+    {
+      "id": "EL-006",
+      "evidenceId": "EV-003",
+      "objectId": "DEC-002",
+      "excerpt": "有的客户一直拖着不付，只能先卡住",
+      "purpose": "支撑逾期判断分支建模"
+    },
+    {
+      "id": "EL-007",
+      "evidenceId": "EV-003",
+      "objectId": "ACT-009",
+      "excerpt": "逾期或额度不足的要走财务特批",
+      "purpose": "支撑特批步骤建模"
+    },
+    {
+      "id": "EL-008",
+      "evidenceId": "EV-002",
+      "objectId": "ACT-005",
+      "excerpt": "订单信息从报价单复制过来",
+      "purpose": "支撑下单步骤建模"
+    },
+    {
+      "id": "EL-009",
+      "evidenceId": "EV-002",
+      "objectId": "ACT-006",
+      "excerpt": "发货单号回填到表格里",
+      "purpose": "支撑发货步骤建模"
+    },
+    {
+      "id": "EL-010",
+      "evidenceId": "EV-003",
+      "objectId": "ACT-007",
+      "excerpt": "开票是财务在系统里操作",
+      "purpose": "支撑开票步骤建模"
+    },
+    {
+      "id": "EL-011",
+      "evidenceId": "EV-003",
+      "objectId": "ACT-008",
+      "excerpt": "回款到账后手工登记",
+      "purpose": "支撑回款登记步骤建模"
+    },
+    {
+      "id": "EL-012",
+      "evidenceId": "EV-001",
+      "objectId": "PROB-001",
+      "excerpt": "报价折扣没有统一标准",
+      "purpose": "支撑痛点识别"
+    },
+    {
+      "id": "EL-013",
+      "evidenceId": "EV-003",
+      "objectId": "PROB-002",
+      "excerpt": "坏账风险主要来自信用信息分散",
+      "purpose": "支撑痛点识别"
+    },
+    {
+      "id": "EL-014",
+      "evidenceId": "EV-001",
+      "objectId": "REQ-001",
+      "excerpt": "折扣要有个审批线",
+      "purpose": "支撑需求来源"
+    },
+    {
+      "id": "EL-015",
+      "evidenceId": "EV-002",
+      "objectId": "REQ-001",
+      "excerpt": "报价单要能带出审批状态",
+      "purpose": "支撑需求来源"
+    },
+    {
+      "id": "EL-016",
+      "evidenceId": "EV-003",
+      "objectId": "REQ-002",
+      "excerpt": "下单前希望能自动查信用",
+      "purpose": "支撑需求来源"
+    },
+    {
+      "id": "EL-017",
+      "evidenceId": "EV-003",
+      "objectId": "REQ-003",
+      "excerpt": "回款超期要能提醒",
+      "purpose": "支撑需求来源"
+    }
+  ],
+  "view": [
+    {
+      "id": "VIEW-001",
+      "projectId": "PRJ-TRADE-001",
+      "name": "报价到回款主流程",
+      "kind": "process",
+      "isDefault": true
+    },
+    {
+      "id": "VIEW-002",
+      "projectId": "PRJ-TRADE-001",
+      "name": "RACI 泳道",
+      "kind": "raci",
+      "isDefault": false
+    }
+  ],
+  "viewLayout": [
+    {
+      "id": "LAY-001",
+      "viewId": "VIEW-001",
+      "objectId": "START-001",
+      "x": 40,
+      "y": 80,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-001",
+      "locked": false
+    },
+    {
+      "id": "LAY-002",
+      "viewId": "VIEW-001",
+      "objectId": "ACT-001",
+      "x": 200,
+      "y": 80,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-001",
+      "locked": false
+    },
+    {
+      "id": "LAY-003",
+      "viewId": "VIEW-001",
+      "objectId": "ACT-002",
+      "x": 360,
+      "y": 80,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-001",
+      "locked": false
+    },
+    {
+      "id": "LAY-004",
+      "viewId": "VIEW-001",
+      "objectId": "DEC-001",
+      "x": 520,
+      "y": 200,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-002",
+      "locked": false
+    },
+    {
+      "id": "LAY-005",
+      "viewId": "VIEW-001",
+      "objectId": "ACT-003",
+      "x": 680,
+      "y": 200,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-002",
+      "locked": false
+    },
+    {
+      "id": "LAY-006",
+      "viewId": "VIEW-001",
+      "objectId": "EXC-001",
+      "x": 680,
+      "y": 300,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-002",
+      "locked": false
+    },
+    {
+      "id": "LAY-007",
+      "viewId": "VIEW-001",
+      "objectId": "ACT-004",
+      "x": 840,
+      "y": 320,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-003",
+      "locked": false
+    },
+    {
+      "id": "LAY-008",
+      "viewId": "VIEW-001",
+      "objectId": "EXC-002",
+      "x": 840,
+      "y": 420,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-003",
+      "locked": false
+    },
+    {
+      "id": "LAY-009",
+      "viewId": "VIEW-001",
+      "objectId": "DEC-002",
+      "x": 1000,
+      "y": 320,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-003",
+      "locked": false
+    },
+    {
+      "id": "LAY-010",
+      "viewId": "VIEW-001",
+      "objectId": "ACT-009",
+      "x": 1000,
+      "y": 420,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-003",
+      "locked": false
+    },
+    {
+      "id": "LAY-011",
+      "viewId": "VIEW-001",
+      "objectId": "ACT-005",
+      "x": 1160,
+      "y": 80,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-001",
+      "locked": false
+    },
+    {
+      "id": "LAY-012",
+      "viewId": "VIEW-001",
+      "objectId": "ACT-006",
+      "x": 1320,
+      "y": 440,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-004",
+      "locked": false
+    },
+    {
+      "id": "LAY-013",
+      "viewId": "VIEW-001",
+      "objectId": "ACT-007",
+      "x": 1480,
+      "y": 440,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-003",
+      "locked": false
+    },
+    {
+      "id": "LAY-014",
+      "viewId": "VIEW-001",
+      "objectId": "ACT-008",
+      "x": 1640,
+      "y": 440,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-003",
+      "locked": false
+    },
+    {
+      "id": "LAY-015",
+      "viewId": "VIEW-001",
+      "objectId": "END-001",
+      "x": 1800,
+      "y": 80,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-001",
+      "locked": false
+    }
+  ]
+}

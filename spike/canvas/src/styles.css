@@ -1,0 +1,442 @@
+:root {
+  color-scheme: dark;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    'Microsoft YaHei',
+    sans-serif;
+  --spike-bg: #0b1220;
+  --spike-panel: #111c33;
+  --spike-border: #26344f;
+  --spike-text: #e2e8f0;
+  --spike-muted: #94a3b8;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--spike-bg);
+  color: var(--spike-text);
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.wb-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--spike-border);
+  background: #0d1729;
+}
+
+.wb-header h1 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.subtitle {
+  margin: 0.15rem 0 0;
+  font-size: 0.75rem;
+  color: var(--spike-muted);
+}
+
+.wb-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+}
+
+.wb-controls label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--spike-muted);
+}
+
+select,
+input[type='text'] {
+  background: #0b1220;
+  color: var(--spike-text);
+  border: 1px solid var(--spike-border);
+  border-radius: 4px;
+  padding: 0.25rem 0.4rem;
+  font: inherit;
+}
+
+button {
+  background: #1d4ed8;
+  color: #f8fafc;
+  border: 1px solid #2563eb;
+  border-radius: 4px;
+  padding: 0.3rem 0.7rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  background: #1e293b;
+  border-color: var(--spike-border);
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+.wb-body {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.wb-canvas {
+  flex: 1 1 auto;
+  min-width: 0;
+  position: relative;
+}
+
+.wb-panel {
+  width: 320px;
+  flex: 0 0 320px;
+  overflow-y: auto;
+  border-left: 1px solid var(--spike-border);
+  background: #0d1729;
+  padding: 0.75rem 0.9rem;
+  font-size: 0.8rem;
+}
+
+.wb-panel h2 {
+  font-size: 0.82rem;
+  margin: 0 0 0.4rem;
+  color: #cbd5e1;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.wb-panel section {
+  margin-bottom: 1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid #1b2740;
+}
+
+.stat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+}
+
+.stat-list > li {
+  color: #cbd5e1;
+  word-break: break-word;
+}
+
+.hint {
+  color: var(--spike-muted);
+  font-size: 0.75rem;
+  margin: 0.3rem 0;
+}
+
+.badge {
+  display: inline-block;
+  margin-left: 0.3rem;
+  padding: 0 0.35rem;
+  border: 1px solid var(--spike-border);
+  border-radius: 999px;
+  font-size: 0.7rem;
+}
+
+.payload {
+  max-height: 160px;
+  overflow: auto;
+  background: #0b1220;
+  border: 1px solid var(--spike-border);
+  border-radius: 4px;
+  padding: 0.4rem;
+  font-size: 0.7rem;
+}
+
+.rename-row {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+}
+
+.rename-row input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.perf-buttons {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+
+.legend {
+  list-style: none;
+  margin: 0.3rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.legend > li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #cbd5e1;
+}
+
+.legend-line {
+  width: 22px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* ---- ChangeSet 输出 ---- */
+.wb-changeset {
+  flex: 0 0 auto;
+  max-height: 30vh;
+  overflow: auto;
+  border-top: 1px solid var(--spike-border);
+  background: #0a101d;
+  padding: 0.5rem 1rem 0.8rem;
+}
+
+.cs-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cs-head h2 {
+  font-size: 0.82rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cs-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.cs-kind {
+  font-size: 0.7rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid var(--spike-border);
+}
+
+.cs-kind--semantic {
+  color: #fbbf24;
+  border-color: #b45309;
+}
+
+.cs-kind--view_layout_patch {
+  color: #38bdf8;
+  border-color: #0369a1;
+}
+
+.cs-json {
+  margin: 0.5rem 0 0;
+  max-height: 22vh;
+  overflow: auto;
+  background: #060b14;
+  border: 1px solid var(--spike-border);
+  border-radius: 4px;
+  padding: 0.5rem;
+  font-size: 0.7rem;
+  line-height: 1.35;
+}
+
+/* ---- 泳道 ---- */
+.lane {
+  position: absolute;
+  box-sizing: border-box;
+  border: 1px dashed #334155;
+  border-radius: 8px;
+  background: rgba(30, 41, 59, 0.35);
+  pointer-events: none;
+}
+
+.lane--role {
+  background: rgba(29, 78, 216, 0.08);
+  border-color: #1e3a8a;
+}
+
+.lane--aux {
+  background: rgba(51, 65, 85, 0.18);
+  border-style: dotted;
+}
+
+.lane-label {
+  position: absolute;
+  top: 4px;
+  left: 10px;
+  font-size: 11px;
+  color: #94a3b8;
+  background: #0b1220;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--spike-border);
+}
+
+/* ---- 自定义节点 ---- */
+.model-node {
+  position: relative;
+  width: 172px;
+  height: 62px;
+  --radius: 10px;
+  --clip: none;
+}
+
+.mn-frame,
+.mn-fill {
+  position: absolute;
+  inset: 0;
+  clip-path: var(--clip);
+  border-radius: var(--radius);
+}
+
+.mn-fill {
+  inset: 2px;
+  background: #111c33;
+}
+
+.model-node.is-selected .mn-frame {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.55);
+}
+
+.model-node.is-inferred .mn-fill {
+  background: repeating-linear-gradient(45deg, #111c33, #111c33 6px, #16223d 6px, #16223d 12px);
+}
+
+.mn-content {
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 5px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  pointer-events: none;
+}
+
+.mn-head {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+.mn-icon {
+  font-size: 12px;
+  line-height: 1;
+}
+
+.mn-code {
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.mn-state {
+  margin-left: auto;
+  font-size: 9px;
+  padding: 0 4px;
+  border-radius: 999px;
+  border: 1px solid #334155;
+  color: #94a3b8;
+}
+
+.mn-title {
+  font-size: 12px;
+  color: #f1f5f9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mn-source {
+  font-size: 9px;
+  letter-spacing: 0.02em;
+}
+
+.mn-handle {
+  width: 6px;
+  height: 6px;
+  background: #475569;
+  border: none;
+}
+
+/* 形状变体：非矩形用 clip-path，圆角类用 --radius。 */
+.model-node[data-shape='rect'] {
+  --radius: 3px;
+}
+
+.model-node[data-shape='rounded'] {
+  --radius: 12px;
+}
+
+.model-node[data-shape='pill'] {
+  --radius: 999px;
+}
+
+.model-node[data-shape='circle'] {
+  --radius: 50%;
+}
+
+.model-node[data-shape='cylinder'] {
+  --radius: 50% / 26%;
+}
+
+.model-node[data-shape='note'] {
+  --radius: 6px;
+  --clip: polygon(0 0, 100% 0, 100% 82%, 90% 100%, 0 100%);
+}
+
+.model-node[data-shape='diamond'] {
+  --radius: 0;
+  --clip: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+}
+
+.model-node[data-shape='hex'] {
+  --radius: 0;
+  --clip: polygon(12% 0, 88% 0, 100% 50%, 88% 100%, 12% 100%, 0 50%);
+}
+
+.model-node[data-shape='parallelogram'] {
+  --radius: 0;
+  --clip: polygon(14% 0, 100% 0, 86% 100%, 0 100%);
+}
+
+.model-node[data-shape='doc'] {
+  --radius: 0;
+  --clip: polygon(0 0, 100% 0, 100% 80%, 90% 100%, 0 100%);
+}

@@ -1,0 +1,57 @@
+chore(m0): 需求调研工作台 M0 技术验证基线首次入库
+
+M0 四个最高风险 Spike + 工程底座首次落盘。复核结论：必须改 0。
+
+工程底座
+- pnpm 单仓（16 个工作区：apps 3 / packages 9 / spike 4），strict TypeScript
+- apps/api：NestJS + Fastify，/api/v1/health、统一 problem+json、requestId 贯穿
+- apps/web：React 19 + Vite；apps/worker：BullMQ（可注入 QueueAdapter，单测用 fake，不连 Redis）
+- 依赖边界由 dependency-cruiser 强制（no-circular / domain-no-frameworks / web-no-server-impl），
+  违规实测 exit 3
+
+统一模型与基准样本
+- @reqatlas/testkit：ModelBundle zod Schema + 跨对象一致性校验器 + fixtures 加载器
+- 冻结基线 demo-trade：sha256 1a54c6e3...3c62，33 对象 / 54 关系 / 3 evidence / 17 evidenceLink
+- 规则：FLOW_NO_END / DECISION_NO_CONDITION / EXCEPTION_NO_TARGET / ACTIVITY_NO_R /
+  ACTIVITY_MULTI_A / REQUIREMENT_NO_SOURCE / EVIDENCE_LINK_DANGLING / TEMPLATE_CANDIDATE_CONFIRMED 等
+
+M0-03 2D 画布（spike/canvas）
+- Domain→React Flow 单向投影（node.id === model_object.id），编辑产出 ChangeSet 形状 JSON
+- 性能实测：适配层非瓶颈（990 对象约 8ms）；渲染拐点 150–250 节点；真实样本 33 对象仅占阈值 16%
+- 浏览器帧率经 Playwright + Chromium 自动化采集（非人工观测）
+
+M0-04 3D 导览（spike/presentation-3d）
+- SceneProjection 确定性投影（同输入两次逐字节一致、输入逆序不变）
+- WebGL 不可用时 2D 降级，SSR 实测 18 步骤 + 28 张对象卡内容不丢
+
+M0-05/06 受控 Agent（spike/agent）
+- Provider Adapter（fake / openai 兼容，默认禁用且有 fetch spy 断言 0 次调用）
+- Schema Guard 直接以 docs/api/schemas/*.json 为验证源（未抄成 zod）
+- 最小上下文：33 对象中仅取 9 个（784/800 token）
+- 对象复用：引用既有 ROLE-003，未重复创建角色
+- 无写权限证明：全链路跑完后 model-bundle.json 哈希不变
+
+M0-07 文档生成（spike/document）
+- Document IR（格式无关）+ docx 渲染 + LibreOffice 转 PDF；中文字体 SimSun/SimHei 已嵌入
+- 确定性：两次生成 word/document.xml 逐字节一致
+- 图文一致性：33/33 对象编号出现在正文
+
+契约与决策
+- docs/api：OpenAPI 3.1（13 端点）+ JSON Schema（严格枚举）+ common-defs 共享枚举 +
+  12 条领域规则 + SSE 事件契约 + OQ-1~OQ-5 开放问题
+- docs/adr：ADR-001~011（全部 Proposed，待总指挥裁定；ADR-011 为阻断项）
+- docs/review：M0 只读复核报告 + 证据模板 + 6 条复核检查项
+- docs/engineering：偏差登记与提交包
+- docs/knowledge：通用贸易 + 离散制造两个行业知识包与岗位话术库
+
+已知未验证 / 缺口（详见 docs/engineering/README.md）
+- 本机 Node v25.2.1 与基线 Node 22 LTS 不一致，本地结论待 Node 22 复验
+- 无 Docker：M1-02 / M1-03 / M1-05 未验证
+- 无 Redis：队列/SSE 相关未验证（worker 单测走 fake 适配器）
+- 本机 PostgreSQL 17 + pgvector 可用但无凭据，M1-05 未实现
+- ADR-011：apps/api、apps/worker 与全部 packages 无生产构建，且根 ci 不含 build
+- 真实模型 provider 联网调用未验证（本机无凭据，未伪造响应）
+- 待变更：三处 spike 产物补 sourceBundleSha256；canvas load-node 改用官方 @reqatlas/testkit/fixtures
+
+复核
+- docs/review/m0-readonly-review.md：必须改 0 / 建议改 2 / 历史遗留 4 / 待确认 4

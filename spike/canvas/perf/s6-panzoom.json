@@ -1,0 +1,35 @@
+{
+  "mode": "pan-zoom",
+  "scaleFactor": 6,
+  "nodeCount": 198,
+  "edgeCount": 324,
+  "frames": {
+    "sampleCount": 105,
+    "durationMs": 5048,
+    "frameMsP50": 50,
+    "frameMsP95": 83.3,
+    "frameMsMax": 83.4,
+    "fpsMean": 20.9,
+    "fpsP05": 12
+  },
+  "longTasks": {
+    "supported": true,
+    "count": 34,
+    "totalMs": 2264,
+    "maxMs": 160
+  },
+  "memoryBefore": {
+    "usedMb": 15.4,
+    "totalMb": 26.3,
+    "limitMb": 3585.8
+  },
+  "memoryAfter": {
+    "usedMb": 15.4,
+    "totalMb": 26.3,
+    "limitMb": 3585.8
+  },
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+  "hardwareConcurrency": 32,
+  "startedAt": "2026-10-04T09:28:09.889Z",
+  "notes": "合成平移+缩放：每帧 setViewport 同时振荡 x/y 与 zoom（会触发重新栅格化），非真实人类输入。"
+}

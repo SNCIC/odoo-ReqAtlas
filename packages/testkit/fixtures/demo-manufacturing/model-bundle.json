@@ -1,0 +1,481 @@
+{
+  "projectId": "PRJ-MFG-001",
+  "projectRevision": 1,
+  "modelObject": [
+    {
+      "id": "ROLE-101",
+      "projectId": "PRJ-MFG-001",
+      "kind": "role",
+      "code": "ROLE-101",
+      "title": "采购员",
+      "state": "confirmed",
+      "sourceStatus": "user_statement",
+      "objectRev": 1,
+      "payload": { "department": "采购部" }
+    },
+    {
+      "id": "ROLE-102",
+      "projectId": "PRJ-MFG-001",
+      "kind": "role",
+      "code": "ROLE-102",
+      "title": "质检员",
+      "state": "confirmed",
+      "sourceStatus": "user_statement",
+      "objectRev": 1,
+      "payload": { "department": "质量部" }
+    },
+    {
+      "id": "ROLE-103",
+      "projectId": "PRJ-MFG-001",
+      "kind": "role",
+      "code": "ROLE-103",
+      "title": "仓管员",
+      "state": "confirmed",
+      "sourceStatus": "material_extracted",
+      "objectRev": 1,
+      "payload": { "department": "仓储部" }
+    },
+    {
+      "id": "ROLE-104",
+      "projectId": "PRJ-MFG-001",
+      "kind": "role",
+      "code": "ROLE-104",
+      "title": "供应商",
+      "state": "confirmed",
+      "sourceStatus": "user_statement",
+      "objectRev": 1,
+      "payload": { "department": "外部" }
+    },
+    {
+      "id": "START-101",
+      "projectId": "PRJ-MFG-001",
+      "kind": "start",
+      "code": "START-101",
+      "title": "采购需求受理",
+      "state": "draft",
+      "sourceStatus": "user_statement",
+      "objectRev": 1,
+      "payload": {}
+    },
+    {
+      "id": "ACT-101",
+      "projectId": "PRJ-MFG-001",
+      "kind": "activity",
+      "code": "ACT-101",
+      "title": "提交采购申请",
+      "state": "confirmed",
+      "sourceStatus": "user_statement",
+      "objectRev": 1,
+      "payload": {}
+    },
+    {
+      "id": "ACT-102",
+      "projectId": "PRJ-MFG-001",
+      "kind": "activity",
+      "code": "ACT-102",
+      "title": "下达采购订单",
+      "state": "confirmed",
+      "sourceStatus": "material_extracted",
+      "objectRev": 1,
+      "payload": {}
+    },
+    {
+      "id": "ACT-103",
+      "projectId": "PRJ-MFG-001",
+      "kind": "activity",
+      "code": "ACT-103",
+      "title": "收货登记",
+      "state": "confirmed",
+      "sourceStatus": "confirmed_fact",
+      "objectRev": 1,
+      "payload": {}
+    },
+    {
+      "id": "ACT-104",
+      "projectId": "PRJ-MFG-001",
+      "kind": "activity",
+      "code": "ACT-104",
+      "title": "来料质检",
+      "state": "confirmed",
+      "sourceStatus": "confirmed_fact",
+      "objectRev": 1,
+      "payload": {}
+    },
+    {
+      "id": "DEC-101",
+      "projectId": "PRJ-MFG-001",
+      "kind": "decision",
+      "code": "DEC-101",
+      "title": "质检是否合格",
+      "state": "confirmed",
+      "sourceStatus": "consultant_judgment",
+      "objectRev": 1,
+      "payload": {}
+    },
+    {
+      "id": "ACT-105",
+      "projectId": "PRJ-MFG-001",
+      "kind": "activity",
+      "code": "ACT-105",
+      "title": "合格入库",
+      "state": "confirmed",
+      "sourceStatus": "confirmed_fact",
+      "objectRev": 1,
+      "payload": {}
+    },
+    {
+      "id": "ACT-106",
+      "projectId": "PRJ-MFG-001",
+      "kind": "activity",
+      "code": "ACT-106",
+      "title": "退货处理",
+      "state": "draft",
+      "sourceStatus": "agent_inference",
+      "objectRev": 1,
+      "payload": {}
+    },
+    {
+      "id": "EXC-101",
+      "projectId": "PRJ-MFG-001",
+      "kind": "exception",
+      "code": "EXC-101",
+      "title": "来料质检不合格",
+      "state": "pending_confirmation",
+      "sourceStatus": "consultant_judgment",
+      "objectRev": 1,
+      "payload": {}
+    },
+    {
+      "id": "END-101",
+      "projectId": "PRJ-MFG-001",
+      "kind": "end",
+      "code": "END-101",
+      "title": "采购闭环",
+      "state": "confirmed",
+      "sourceStatus": "confirmed_fact",
+      "objectRev": 1,
+      "payload": {}
+    },
+    {
+      "id": "DO-101",
+      "projectId": "PRJ-MFG-001",
+      "kind": "data_object",
+      "code": "DO-101",
+      "title": "采购订单",
+      "state": "confirmed",
+      "sourceStatus": "material_extracted",
+      "objectRev": 1,
+      "payload": { "docType": "purchase_order" }
+    },
+    {
+      "id": "DO-102",
+      "projectId": "PRJ-MFG-001",
+      "kind": "data_object",
+      "code": "DO-102",
+      "title": "收货单",
+      "state": "confirmed",
+      "sourceStatus": "material_extracted",
+      "objectRev": 1,
+      "payload": { "docType": "goods_receipt" }
+    },
+    {
+      "id": "DO-103",
+      "projectId": "PRJ-MFG-001",
+      "kind": "data_object",
+      "code": "DO-103",
+      "title": "质检报告",
+      "state": "confirmed",
+      "sourceStatus": "material_extracted",
+      "objectRev": 1,
+      "payload": { "docType": "quality_report" }
+    },
+    {
+      "id": "SYS-101",
+      "projectId": "PRJ-MFG-001",
+      "kind": "system",
+      "code": "SYS-101",
+      "title": "ERP",
+      "state": "confirmed",
+      "sourceStatus": "confirmed_fact",
+      "objectRev": 1,
+      "payload": {}
+    },
+    {
+      "id": "PROB-101",
+      "projectId": "PRJ-MFG-001",
+      "kind": "problem",
+      "code": "PROB-101",
+      "title": "来料质检结果手工登记，易漏记",
+      "state": "confirmed",
+      "sourceStatus": "user_statement",
+      "objectRev": 1,
+      "payload": {}
+    },
+    {
+      "id": "REQ-101",
+      "projectId": "PRJ-MFG-001",
+      "kind": "requirement",
+      "code": "REQ-101",
+      "title": "质检结果必须在系统中留痕并关联收货单",
+      "state": "draft",
+      "sourceStatus": "agent_inference",
+      "objectRev": 1,
+      "payload": {}
+    }
+  ],
+  "modelRelation": [
+    { "id": "mrel-001", "kind": "performs_R", "fromId": "ROLE-101", "toId": "ACT-101" },
+    { "id": "mrel-002", "kind": "accountable_A", "fromId": "ROLE-101", "toId": "ACT-101" },
+    { "id": "mrel-003", "kind": "performs_R", "fromId": "ROLE-101", "toId": "ACT-102" },
+    { "id": "mrel-004", "kind": "accountable_A", "fromId": "ROLE-101", "toId": "ACT-102" },
+    { "id": "mrel-005", "kind": "performs_R", "fromId": "ROLE-103", "toId": "ACT-103" },
+    { "id": "mrel-006", "kind": "accountable_A", "fromId": "ROLE-103", "toId": "ACT-103" },
+    { "id": "mrel-007", "kind": "performs_R", "fromId": "ROLE-102", "toId": "ACT-104" },
+    { "id": "mrel-008", "kind": "accountable_A", "fromId": "ROLE-102", "toId": "ACT-104" },
+    { "id": "mrel-009", "kind": "performs_R", "fromId": "ROLE-103", "toId": "ACT-105" },
+    { "id": "mrel-010", "kind": "accountable_A", "fromId": "ROLE-103", "toId": "ACT-105" },
+    { "id": "mrel-011", "kind": "performs_R", "fromId": "ROLE-101", "toId": "ACT-106" },
+    { "id": "mrel-012", "kind": "accountable_A", "fromId": "ROLE-101", "toId": "ACT-106" },
+    { "id": "mrel-013", "kind": "consulted_C", "fromId": "ROLE-104", "toId": "ACT-106" },
+    { "id": "mrel-014", "kind": "informed_I", "fromId": "ROLE-104", "toId": "ACT-102" },
+
+    { "id": "mrel-015", "kind": "flow_to", "fromId": "START-101", "toId": "ACT-101" },
+    { "id": "mrel-016", "kind": "flow_to", "fromId": "ACT-101", "toId": "ACT-102" },
+    {
+      "id": "mrel-017",
+      "kind": "flow_to",
+      "fromId": "ACT-102",
+      "toId": "ACT-103",
+      "payload": { "objectId": "DO-101" }
+    },
+    {
+      "id": "mrel-018",
+      "kind": "flow_to",
+      "fromId": "ACT-103",
+      "toId": "ACT-104",
+      "payload": { "objectId": "DO-102" }
+    },
+    { "id": "mrel-019", "kind": "flow_to", "fromId": "ACT-104", "toId": "DEC-101" },
+    {
+      "id": "mrel-020",
+      "kind": "flow_to",
+      "fromId": "DEC-101",
+      "toId": "ACT-105",
+      "label": "合格：入库"
+    },
+    {
+      "id": "mrel-021",
+      "kind": "flow_to",
+      "fromId": "DEC-101",
+      "toId": "ACT-106",
+      "label": "不合格：退货处理"
+    },
+    { "id": "mrel-022", "kind": "flow_to", "fromId": "ACT-105", "toId": "END-101" },
+    { "id": "mrel-023", "kind": "flow_to", "fromId": "ACT-106", "toId": "END-101" },
+    { "id": "mrel-024", "kind": "flow_to", "fromId": "EXC-101", "toId": "ACT-106" },
+
+    { "id": "mrel-025", "kind": "has_exception", "fromId": "ACT-104", "toId": "EXC-101" },
+
+    { "id": "mrel-026", "kind": "produces", "fromId": "ACT-102", "toId": "DO-101" },
+    { "id": "mrel-027", "kind": "produces", "fromId": "ACT-103", "toId": "DO-102" },
+    { "id": "mrel-028", "kind": "produces", "fromId": "ACT-104", "toId": "DO-103" },
+    { "id": "mrel-029", "kind": "uses_system", "fromId": "ACT-102", "toId": "SYS-101" },
+    { "id": "mrel-032", "kind": "derived_from", "fromId": "REQ-101", "toId": "PROB-101" }
+  ],
+  "evidence": [
+    {
+      "id": "EV-101",
+      "type": "interview_segment",
+      "locator": "质检员访谈录音 00:03:00-00:03:40",
+      "provider": "质检员",
+      "capturedAt": "2026-04-02",
+      "classification": "internal"
+    }
+  ],
+  "evidenceLink": [
+    {
+      "id": "EL-101",
+      "evidenceId": "EV-101",
+      "objectId": "ACT-101",
+      "excerpt": "采购申请先纸质再录系统",
+      "purpose": "支撑步骤建模"
+    },
+    {
+      "id": "EL-102",
+      "evidenceId": "EV-101",
+      "objectId": "ACT-102",
+      "excerpt": "订单下达后要通知供应商",
+      "purpose": "支撑步骤建模"
+    },
+    {
+      "id": "EL-103",
+      "evidenceId": "EV-101",
+      "objectId": "ACT-103",
+      "excerpt": "收货时对着送货单点数",
+      "purpose": "支撑步骤建模"
+    },
+    {
+      "id": "EL-104",
+      "evidenceId": "EV-101",
+      "objectId": "ACT-104",
+      "excerpt": "来料抽检，结果先记纸上",
+      "purpose": "支撑步骤建模"
+    },
+    {
+      "id": "EL-105",
+      "evidenceId": "EV-101",
+      "objectId": "DEC-101",
+      "excerpt": "抽检不合格的一律退货",
+      "purpose": "支撑分支建模"
+    },
+    {
+      "id": "EL-106",
+      "evidenceId": "EV-101",
+      "objectId": "ACT-105",
+      "excerpt": "合格才办理入库",
+      "purpose": "支撑步骤建模"
+    },
+    {
+      "id": "EL-107",
+      "evidenceId": "EV-101",
+      "objectId": "ACT-106",
+      "excerpt": "退货要通知采购和供应商",
+      "purpose": "支撑步骤建模"
+    },
+    {
+      "id": "EL-108",
+      "evidenceId": "EV-101",
+      "objectId": "PROB-101",
+      "excerpt": "质检结果经常忘记录入系统",
+      "purpose": "支撑痛点识别"
+    },
+    {
+      "id": "EL-109",
+      "evidenceId": "EV-101",
+      "objectId": "REQ-101",
+      "excerpt": "质检结果要能关联收货单",
+      "purpose": "支撑需求来源"
+    }
+  ],
+  "view": [
+    {
+      "id": "VIEW-101",
+      "projectId": "PRJ-MFG-001",
+      "name": "采购收货与质检流程",
+      "kind": "process",
+      "isDefault": true
+    }
+  ],
+  "viewLayout": [
+    {
+      "id": "mlay-001",
+      "viewId": "VIEW-101",
+      "objectId": "START-101",
+      "x": 40,
+      "y": 80,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-101",
+      "locked": false
+    },
+    {
+      "id": "mlay-002",
+      "viewId": "VIEW-101",
+      "objectId": "ACT-101",
+      "x": 200,
+      "y": 80,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-101",
+      "locked": false
+    },
+    {
+      "id": "mlay-003",
+      "viewId": "VIEW-101",
+      "objectId": "ACT-102",
+      "x": 360,
+      "y": 80,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-101",
+      "locked": false
+    },
+    {
+      "id": "mlay-004",
+      "viewId": "VIEW-101",
+      "objectId": "ACT-103",
+      "x": 520,
+      "y": 200,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-103",
+      "locked": false
+    },
+    {
+      "id": "mlay-005",
+      "viewId": "VIEW-101",
+      "objectId": "ACT-104",
+      "x": 680,
+      "y": 320,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-102",
+      "locked": false
+    },
+    {
+      "id": "mlay-006",
+      "viewId": "VIEW-101",
+      "objectId": "DEC-101",
+      "x": 840,
+      "y": 320,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-102",
+      "locked": false
+    },
+    {
+      "id": "mlay-007",
+      "viewId": "VIEW-101",
+      "objectId": "ACT-105",
+      "x": 1000,
+      "y": 440,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-103",
+      "locked": false
+    },
+    {
+      "id": "mlay-008",
+      "viewId": "VIEW-101",
+      "objectId": "ACT-106",
+      "x": 1000,
+      "y": 80,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-101",
+      "locked": false
+    },
+    {
+      "id": "mlay-009",
+      "viewId": "VIEW-101",
+      "objectId": "EXC-101",
+      "x": 840,
+      "y": 200,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-102",
+      "locked": false
+    },
+    {
+      "id": "mlay-010",
+      "viewId": "VIEW-101",
+      "objectId": "END-101",
+      "x": 1200,
+      "y": 260,
+      "width": 160,
+      "height": 60,
+      "lane": "ROLE-101",
+      "locked": false
+    }
+  ]
+}

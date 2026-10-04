@@ -1,0 +1,35 @@
+{
+  "mode": "idle",
+  "scaleFactor": 30,
+  "nodeCount": 990,
+  "edgeCount": 1620,
+  "frames": {
+    "sampleCount": 239,
+    "durationMs": 5015,
+    "frameMsP50": 16.7,
+    "frameMsP95": 16.8,
+    "frameMsMax": 616.6,
+    "fpsMean": 47.8,
+    "fpsP05": 59.5
+  },
+  "longTasks": {
+    "supported": true,
+    "count": 5,
+    "totalMs": 1816,
+    "maxMs": 623
+  },
+  "memoryBefore": {
+    "usedMb": 42.6,
+    "totalMb": 92.9,
+    "limitMb": 3585.8
+  },
+  "memoryAfter": {
+    "usedMb": 42.6,
+    "totalMb": 92.9,
+    "limitMb": 3585.8
+  },
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+  "hardwareConcurrency": 32,
+  "startedAt": "2026-10-04T09:28:57.934Z",
+  "notes": "空转：仅渲染，无交互压力。"
+}

@@ -1,0 +1,50 @@
+{
+  "reason": "访谈现场补充折扣审批事项",
+  "source": {
+    "type": "manual",
+    "referenceIds": ["evd_78"]
+  },
+  "operations": [
+    {
+      "operationId": "op_1",
+      "op": "create",
+      "targetType": "model_object",
+      "tempId": "tmp_activity_1",
+      "after": {
+        "kind": "activity",
+        "code": "ACT-002",
+        "title": "审批折扣",
+        "payload": {
+          "trigger": "折扣超过阈值",
+          "input": "报价单、客户等级"
+        }
+      },
+      "reason": "客户明确说明折扣超过阈值需要审批",
+      "sourceRefs": [
+        {
+          "type": "evidence",
+          "id": "evd_78"
+        }
+      ],
+      "confidenceState": "user_statement"
+    },
+    {
+      "operationId": "op_2",
+      "op": "create",
+      "targetType": "model_relation",
+      "after": {
+        "kind": "accountable_A",
+        "fromId": "role_sales_manager",
+        "toId": "tmp_activity_1"
+      },
+      "reason": "销售经理是折扣审批的最终负责 A",
+      "sourceRefs": [
+        {
+          "type": "user_input",
+          "id": "msg_1"
+        }
+      ],
+      "confidenceState": "user_statement"
+    }
+  ]
+}

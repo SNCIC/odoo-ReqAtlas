@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "problem.json",
+  "title": "Problem",
+  "description": "统一错误响应体，Media Type 固定为 application/problem+json（RFC 9457）。权威来源：开发方案 §6.1 通用协议与附录 A 稳定错误码。所有错误响应同时携带 X-Request-Id 响应头。",
+  "type": "object",
+  "required": ["type", "title", "status", "code", "requestId"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "minLength": 1,
+      "description": "稳定的错误类型文档 URI（URI reference 语义）。同一 code 对应同一 type；未知错误使用 about:blank。"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "面向人的短语标题，不用于程序判断。"
+    },
+    "status": {
+      "type": "integer",
+      "minimum": 400,
+      "maximum": 599,
+      "description": "HTTP 状态码，与 error-code.json 中记录的 code→HTTP 状态映射一致。"
+    },
+    "code": {
+      "$ref": "error-code.json",
+      "description": "稳定错误码，客户端据此分支。"
+    },
+    "detail": {
+      "type": "string",
+      "description": "针对本次请求的可读说明；不包含敏感对象标题或秘密。"
+    },
+    "requestId": {
+      "type": "string",
+      "pattern": "^req_[A-Za-z0-9_-]+$",
+      "description": "与 X-Request-Id 响应头一致，用于日志与审计对账。"
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "结构化上下文。REVISION_CONFLICT 含 expected/actual；DOMAIN_RULE_BLOCKED 含 findings[]（见 domain-rules.md）；VALIDATION_FAILED 含 fieldErrors[]。"
+    }
+  },
+  "additionalProperties": true
+}

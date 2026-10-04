@@ -1,0 +1,221 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "change-draft.json",
+  "title": "ChangeDraft",
+  "description": "Agent 结构化输出契约。字段严格对齐《需求调研工作台产品设计文档》v1.0 附录 C（Agent 结构化输出契约）的 8 个字段：scope/intent/assumptions/questions/changes/sources/validation/summary；另含 draftId 与 basedOnRevision，用于审阅与 apply 时按当前 revision 二次校验（§5.3 Agent 链路）。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "draftId",
+    "basedOnRevision",
+    "scope",
+    "intent",
+    "assumptions",
+    "sources",
+    "validation",
+    "summary"
+  ],
+  "properties": {
+    "draftId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "basedOnRevision": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "草案生成时依据的 project_revision；apply 时若与当前 revision 不一致则拒绝。"
+    },
+    "scope": {
+      "$ref": "#/$defs/scope"
+    },
+    "intent": {
+      "type": "string",
+      "enum": ["create", "modify", "explain", "check", "document"],
+      "description": "附录 C：创建、修改、解释、检查、成文。"
+    },
+    "assumptions": {
+      "type": "array",
+      "description": "必填字段；未知时为空数组。假设永远不能进入基线（AGENT_ASSUMPTION）。",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "questions": {
+      "type": "array",
+      "description": "可选字段；阻断建模时先追问，每轮数量受 options.maxQuestions 限制。",
+      "items": {
+        "$ref": "#/$defs/question"
+      }
+    },
+    "changes": {
+      "type": "array",
+      "description": "可选字段；新增/修改/删除/连线。应用前须过 Schema Guard 与 Domain Guard。",
+      "items": {
+        "$ref": "#/$defs/change"
+      }
+    },
+    "sources": {
+      "type": "array",
+      "description": "必填字段；对象、证据或用户输入。事实型变更必须有来源。",
+      "items": {
+        "$ref": "change-set.json#/$defs/sourceRef"
+      }
+    },
+    "validation": {
+      "$ref": "#/$defs/validation"
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "description": "面向用户的简述（中文），用于草案卡片标题区。"
+    }
+  },
+  "$defs": {
+    "scope": {
+      "type": "object",
+      "required": ["type", "id"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "$ref": "common-defs.json#/$defs/ScopeType"
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "question": {
+      "type": "object",
+      "required": ["text"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reason": {
+          "type": "string",
+          "description": "为什么问；排序依据为阻断建模 > 影响范围 > 影响方案 > 可稍后补充。"
+        },
+        "blocking": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operationId",
+        "op",
+        "targetType",
+        "before",
+        "after",
+        "reason",
+        "sourceRefs",
+        "confidenceState"
+      ],
+      "anyOf": [
+        {
+          "required": ["targetId"]
+        },
+        {
+          "required": ["tempId"]
+        }
+      ],
+      "properties": {
+        "operationId": {
+          "type": "string",
+          "pattern": "^op_[A-Za-z0-9_-]+$"
+        },
+        "op": {
+          "$ref": "common-defs.json#/$defs/OperationKind"
+        },
+        "targetType": {
+          "$ref": "common-defs.json#/$defs/TargetType"
+        },
+        "targetId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tempId": {
+          "type": "string",
+          "pattern": "^tmp_[A-Za-z0-9_-]+$"
+        },
+        "before": {
+          "type": ["object", "null"]
+        },
+        "after": {
+          "type": ["object", "null"]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "sourceRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "change-set.json#/$defs/sourceRef"
+          }
+        },
+        "confidenceState": {
+          "$ref": "change-set.json#/$defs/confidenceState"
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "required": ["blocking", "warnings"],
+      "additionalProperties": false,
+      "properties": {
+        "blocking": {
+          "type": "array",
+          "description": "阻断项；非空时草案不可应用。",
+          "items": {
+            "$ref": "#/$defs/finding"
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "description": "告警项；可应用但需用户确认。",
+          "items": {
+            "$ref": "#/$defs/finding"
+          }
+        }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "required": ["ruleCode", "severity", "objectIds", "message"],
+      "additionalProperties": false,
+      "properties": {
+        "ruleCode": {
+          "type": "string",
+          "description": "稳定领域规则码，见 docs/api/domain-rules.md。"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["block", "error", "warn"]
+        },
+        "objectIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "命中的对象/关系 ID，可为 tempId。"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

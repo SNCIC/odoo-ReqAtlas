@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agent-run.json",
+  "title": "AgentRunRequest",
+  "description": "创建 Agent 任务的请求契约（开发方案 §6.4）。根 schema 即 AgentRunRequest；响应状态机 AgentRun 见 $defs/AgentRun，状态枚举对齐开发方案附录 B（AgentRun：queued → running → needs_input → succeeded/failed/cancelled）。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["task", "scope", "input"],
+  "properties": {
+    "task": {
+      "$ref": "#/$defs/task"
+    },
+    "scope": {
+      "$ref": "#/$defs/scope"
+    },
+    "input": {
+      "$ref": "#/$defs/input"
+    },
+    "options": {
+      "$ref": "#/$defs/options"
+    }
+  },
+  "$defs": {
+    "task": {
+      "type": "string",
+      "enum": [
+        "build_model",
+        "generate_questions",
+        "check_completeness",
+        "explain",
+        "generate_storyline"
+      ],
+      "description": "四类首版能力（追问/建模/检查/解释）及故事线生成的稳定任务标识。"
+    },
+    "scope": {
+      "type": "object",
+      "required": ["type", "id"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "$ref": "common-defs.json#/$defs/ScopeType"
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "input": {
+      "type": "object",
+      "required": ["text"],
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "description": "用户自然语言输入；服务端标记为 untrusted_content，不作为指令执行。"
+        },
+        "selectedObjectIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "options": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "allowAssumptions": {
+          "type": "boolean",
+          "default": false,
+          "description": "是否允许按假设生成；即便为 true，假设也只能停留在草案。"
+        },
+        "maxQuestions": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20,
+          "default": 3,
+          "description": "单轮追问上限，防止无限追问。"
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["queued", "running", "needs_input", "succeeded", "failed", "cancelled"],
+      "description": "AgentRun 状态机（附录 B）。"
+    },
+    "AgentRun": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "task", "scope", "status"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "task": {
+          "$ref": "#/$defs/task"
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "draftId": {
+          "type": "string",
+          "description": "succeeded 或 needs_input 后关联的 ChangeDraft ID。"
+        },
+        "questions": {
+          "type": "array",
+          "description": "needs_input 时返回的追问列表。",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "error": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "RFC 3339 date-time。"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "RFC 3339 date-time。"
+        }
+      }
+    }
+  }
+}
